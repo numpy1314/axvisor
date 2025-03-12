@@ -7,6 +7,7 @@ authors = ["Keyang Hu <keyang.hu@qq.com>"]
 
 [features]
 fs = ["axstd/fs"]
+tracing = ["x86_vcpu/tracing"]
 
 [dependencies]
 log = "=0.4.21"
@@ -44,6 +45,11 @@ percpu = { version = "0.1.4", features = ["arm-el2"] }
 
 axdevice = { path = "../../axdevice" }
 axdevice_base = { path = "../../axdevice_crates/axdevice_base" }
+
+axvisor_api = { git = "https://github.com/arceos-hypervisor/axvisor_api.git" }
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+x86_vcpu = { path = "../../x86_vcpu" }
 
 [build-dependencies]
 toml = { git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std" }

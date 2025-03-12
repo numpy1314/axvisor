@@ -1,7 +1,7 @@
 mod config;
 mod images;
 mod mock;
-mod timer;
+pub mod timer;
 mod vcpus;
 mod vm_list;
 

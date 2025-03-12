@@ -86,7 +86,7 @@ pub fn check_events() {
         let now = axhal::time::wall_time();
         let event = timer_list.lock().expire_one(now);
         if let Some((_deadline, event)) = event {
-            trace!("pick one {:#?} to handler!!!", _deadline);
+            trace!("pick one {:#?} to handle!!!", _deadline);
             event.callback(now);
         } else {
             break;
