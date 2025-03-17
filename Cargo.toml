@@ -25,9 +25,11 @@ axstd = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm
     "alloc",
     "paging",
     # "fs",
+    "ipi",
     "irq",
     "hv",
     "multitask",
+    "smp",
     # "sched_rr"
 ]}
 
@@ -39,10 +41,16 @@ axaddrspace = { git = "https://github.com/arceos-hypervisor/axaddrspace.git", br
 # System independent crates provided by ArceOS, these crates could be imported by remote url. 
 crate_interface = "0.1"
 axerrno = "0.1.0"
+cpumask = "0.1.0"
+kernel_guard = "0.1"
 memory_addr = "0.3"
 page_table_entry = { version = "0.5", features = ["arm-el2"] }
 page_table_multiarch = "0.5"
 percpu = { version = "0.1.4", features = ["arm-el2"] }
+
+axdevice = { path = "../axdevice" }
+axdevice_base = { path = "../axdevice_crates/axdevice_base" }
+axvisor_api = { git = "https://github.com/arceos-hypervisor/axvisor_api.git" }
 
 [build-dependencies]
 toml = { git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std" }
@@ -73,5 +81,11 @@ axdevice = { path = "../axdevice" }
 axdevice_base = { path = "../axdevice_crates/axdevice_base" }
 
 [patch."https://github.com/arceos-hypervisor/arceos.git"]
-axstd = { path = "../arceos-new/ulib/axstd", features = ["ipi", "smp", "irq"] }
+axstd = { path = "../arceos-new/ulib/axstd", features = [
+    "alloc",
+    "paging",
+    "ipi",
+    "smp",
+    "irq"
+]}
 axconfig = { path = "../arceos-new/modules/axconfig" }

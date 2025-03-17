@@ -345,6 +345,7 @@ dependencies = [
  "axruntime",
  "axsync",
  "axtask",
+ "kspin",
 ]
 
 [[package]]
@@ -553,12 +554,17 @@ version = "0.1.0"
 dependencies = [
  "axaddrspace 0.1.0 (git+https://github.com/arceos-hypervisor/axaddrspace.git?branch=api)",
  "axconfig",
+ "axdevice",
+ "axdevice_base",
  "axerrno",
  "axstd",
  "axvcpu",
+ "axvisor_api",
  "axvm",
  "bitflags 2.9.0",
+ "cpumask",
  "crate_interface",
+ "kernel_guard",
  "kspin",
  "lazyinit",
  "log",
