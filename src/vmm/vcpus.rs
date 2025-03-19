@@ -292,6 +292,7 @@ fn vcpu_run() {
 
                     // TODO: maybe move this irq dispatcher to lower layer to accelerate the interrupt handling
                     axhal::irq::handler_irq(vector as usize);
+                    super::timer::check_events();
                 }
                 AxVCpuExitReason::Halt => {
                     debug!("VM[{}] run VCpu[{}] Halt", vm_id, vcpu_id);
