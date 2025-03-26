@@ -58,6 +58,12 @@ pub fn start() {
 #[allow(unused_imports)]
 pub use vcpus::{find_vcpu_task, with_vcpu_task};
 
+/// Run a closure with the specified VM.
+pub fn with_wm<T>(vm_id: usize, f: impl FnOnce(VMRef) -> T) -> Option<T> {
+    let vm = vm_list::get_vm_by_id(vm_id)?;
+    Some(f(vm))
+}
+
 /// Run a closure with the specified VM and vCPU.
 pub fn with_vm_and_vcpu<T>(
     vm_id: usize,
@@ -73,7 +79,7 @@ pub fn with_vm_and_vcpu<T>(
 /// Run a closure with the specified VM and vCPU, with the guarantee that the closure will be
 /// executed on the physical CPU where the vCPU is running, waiting, or queueing.
 ///
-/// It seems necessary to disable scheduling when running the closure.
+/// TODO: It seems necessary to disable scheduling when running the closure.
 pub fn with_vm_and_vcpu_on_pcpu(
     vm_id: usize,
     vcpu_id: usize,

@@ -220,11 +220,11 @@ mod vmm_api_impl {
         <AxVMHalImpl as AxVMHal>::current_vcpu_id()
     }
 
-    extern fn vcpu_num(vm_id: VMId) -> usize {
-        todo!("vcpu_num")
+    extern fn vcpu_num(vm_id: VMId) -> Option<usize> {
+        vmm::with_wm(vm_id, |vm| vm.vcpu_num())
     }
 
-    extern fn active_vcpus(vm_id: VMId) -> usize {
+    extern fn active_vcpus(vm_id: VMId) -> Option<usize> {
         todo!("active_vcpus")
     }
 
