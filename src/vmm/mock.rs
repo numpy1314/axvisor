@@ -1,12 +1,12 @@
-use core::cell::{OnceCell, Ref, RefCell};
+use core::cell::RefCell;
 
 use alloc::boxed::Box;
-use axaddrspace::{device::{self, AccessWidth}, GuestPhysAddr, GuestPhysAddrRange};
-use axdevice_base::{BaseDeviceOps, DeviceRWContext, InterruptInjector};
+use axaddrspace::{device::{AccessWidth, DeviceAddrRange}, GuestPhysAddrRange};
+use axdevice_base::BaseDeviceOps;
 use cpumask::CpuMask;
 
 pub struct MockTimer {
-    injector: RefCell<Option<Box<InterruptInjector>>>,
+    // injector: RefCell<Option<Box<InterruptInjector>>>,
 }
 
 impl BaseDeviceOps<GuestPhysAddrRange> for MockTimer {
@@ -21,40 +21,30 @@ impl BaseDeviceOps<GuestPhysAddrRange> for MockTimer {
 
     fn handle_read(
         &self,
-        addr: <GuestPhysAddrRange as device::DeviceAddrRange>::Addr,
+        addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
         width: AccessWidth,
-        context: DeviceRWContext,
     ) -> axerrno::AxResult<usize> {
         todo!()
     }
 
     fn handle_write(
         &self,
-        addr: <GuestPhysAddrRange as device::DeviceAddrRange>::Addr,
+        addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
         width: AccessWidth,
         val: usize,
-        context: DeviceRWContext,
     ) -> axerrno::AxResult {
         todo!()
-    }
-
-    fn set_interrupt_injector(&self, injector: Box<InterruptInjector>) {
-        self.injector.borrow_mut().replace(injector);
     }
 }
 
 impl MockTimer {
     pub fn new() -> Self {
-        Self {
-            injector: RefCell::new(None),
-        }
+        Self {}
     }
 
     pub fn tick(&self) {
-        // Warning! Potential deadlock here
-        if let Some(injector) = self.injector.borrow_mut().as_mut() {
-            injector(CpuMask::one_shot(0), 0x77);
-        }
+        use axvisor_api::vmm::*;
+        inject_interrupt(current_vm_id(), current_vcpu_id(), 0x77);
     }
 }
 

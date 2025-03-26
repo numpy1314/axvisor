@@ -55,7 +55,6 @@ pub fn init_guest_vms() {
                 mock_timer.tick();
             });
         }).expect("Failed to create VM");
-        vm.set_devices_interrupt_injector();
         push_vm(vm.clone());
 
         // Load corresponding images for VM.
