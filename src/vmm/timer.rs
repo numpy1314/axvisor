@@ -77,8 +77,8 @@ pub fn cancel_timer(token: usize) {
 
 /// Check and process any pending timer events
 pub fn check_events() {
-    info!("Checking timer events...");
-    info!("now is {:#?}", axhal::time::wall_time());
+    // info!("Checking timer events...");
+    // info!("now is {:#?}", axhal::time::wall_time());
     let timer_list = unsafe { TIMER_LIST.current_ref_mut_raw() };
     loop {
         let now = axhal::time::wall_time();
