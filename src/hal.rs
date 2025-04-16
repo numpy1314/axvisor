@@ -237,3 +237,25 @@ mod vmm_api_impl {
         // vmm::timer::notify_timer_expired(vm_id, vcpu_id);
     }
 }
+
+#[axvisor_api::api_mod_impl(axvisor_api::arch)]
+mod arch_api_impl {
+
+    #[cfg(target_arch = "aarch64")]
+    extern fn hardware_inject_virtual_interrupt(irq: axvisor_api::vmm::InterruptVector) {
+        use axstd::os::arceos::modules::axhal;
+        axhal::irq::inject_interrupt(irq as usize);
+    }
+
+    #[cfg(target_arch = "aarch64")]
+    extern fn read_vgicd_typer() -> u32 {
+        use axstd::os::arceos::modules::axhal::irq::MyVgic;
+        MyVgic::get_gicd().lock().get_typer()
+    }
+
+    #[cfg(target_arch = "aarch64")]
+    extern fn read_vgicd_iidr() -> u32 {
+        use axstd::os::arceos::modules::axhal::irq::MyVgic;
+        MyVgic::get_gicd().lock().get_iidr()
+    }
+}
