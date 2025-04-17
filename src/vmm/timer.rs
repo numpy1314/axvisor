@@ -56,7 +56,11 @@ where
     F: FnOnce(TimeValue) + Send + 'static,
 {
     info!("Registering timer...");
-    info!("deadline is {:#?} = {:#?}", deadline, TimeValue::from_nanos(deadline as u64));
+    info!(
+        "deadline is {:#?} = {:#?}",
+        deadline,
+        TimeValue::from_nanos(deadline as u64)
+    );
     let timer_list = unsafe { TIMER_LIST.current_ref_mut_raw() };
     let mut timers = timer_list.lock();
     let token = TOKEN.fetch_add(1, Ordering::Release);

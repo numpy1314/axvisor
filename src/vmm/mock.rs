@@ -1,7 +1,10 @@
 use core::cell::RefCell;
 
 use alloc::boxed::Box;
-use axaddrspace::{device::{AccessWidth, DeviceAddrRange}, GuestPhysAddrRange};
+use axaddrspace::{
+    GuestPhysAddrRange,
+    device::{AccessWidth, DeviceAddrRange},
+};
 use axdevice_base::BaseDeviceOps;
 use cpumask::CpuMask;
 
