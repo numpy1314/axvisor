@@ -615,7 +615,7 @@ dependencies = [
 [[package]]
 name = "axvisor_api"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#fc96d7cca4b8b6b0feaf28f2351b71e5ae8cbb84"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#78d0d417a4844e743cd8df1ef8b6629eab0849ba"
 dependencies = [
  "axaddrspace",
  "axvisor_api_proc",
@@ -626,7 +626,7 @@ dependencies = [
 [[package]]
 name = "axvisor_api_proc"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#fc96d7cca4b8b6b0feaf28f2351b71e5ae8cbb84"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#78d0d417a4844e743cd8df1ef8b6629eab0849ba"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",

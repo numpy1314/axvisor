@@ -164,19 +164,26 @@ pub(crate) fn enable_virtualization() {
 mod memory_api_impl {
     use super::*;
 
-    extern "C" fn alloc_frame() -> Option<HostPhysAddr> {
+    extern fn alloc_frame() -> Option<HostPhysAddr> {
         <AxMmHalImpl as AxMmHal>::alloc_frame()
     }
 
-    extern "C" fn dealloc_frame(paddr: HostPhysAddr) {
+    extern fn alloc_contiguous_frames(num_frames: usize, frame_align_pow2: usize) -> Option<HostPhysAddr> {
+        arceos::modules::axalloc::global_allocator()
+            .alloc_pages(num_frames, PAGE_SIZE_4K << frame_align_pow2)
+            .map(|vaddr| <AxMmHalImpl as AxMmHal>::virt_to_phys(vaddr.into()))
+            .ok()
+    }
+
+    extern fn dealloc_frame(paddr: HostPhysAddr) {
         <AxMmHalImpl as AxMmHal>::dealloc_frame(paddr)
     }
 
-    extern "C" fn phys_to_virt(paddr: HostPhysAddr) -> HostVirtAddr {
+    extern fn phys_to_virt(paddr: HostPhysAddr) -> HostVirtAddr {
         <AxMmHalImpl as AxMmHal>::phys_to_virt(paddr)
     }
 
-    extern "C" fn virt_to_phys(vaddr: HostVirtAddr) -> HostPhysAddr {
+    extern fn virt_to_phys(vaddr: HostVirtAddr) -> HostPhysAddr {
         <AxMmHalImpl as AxMmHal>::virt_to_phys(vaddr)
     }
 }
@@ -186,26 +193,26 @@ mod time_api_impl {
     use super::*;
     use axvisor_api::time::{CancelToken, Nanos, Ticks, TimeValue};
 
-    extern "C" fn current_ticks() -> Ticks {
+    extern fn current_ticks() -> Ticks {
         axhal::time::current_ticks()
     }
 
-    extern "C" fn ticks_to_nanos(ticks: Ticks) -> Nanos {
+    extern fn ticks_to_nanos(ticks: Ticks) -> Nanos {
         axhal::time::ticks_to_nanos(ticks)
     }
 
-    extern "C" fn nanos_to_ticks(nanos: Nanos) -> Ticks {
+    extern fn nanos_to_ticks(nanos: Nanos) -> Ticks {
         axhal::time::nanos_to_ticks(nanos)
     }
 
-    extern "C" fn register_timer(
+    extern fn register_timer(
         deadline: TimeValue,
         handler: alloc::boxed::Box<dyn FnOnce(TimeValue) + Send + 'static>,
     ) -> CancelToken {
         vmm::timer::register_timer(deadline.as_nanos() as u64, |t| handler(t))
     }
 
-    extern "C" fn cancel_timer(token: CancelToken) {
+    extern fn cancel_timer(token: CancelToken) {
         vmm::timer::cancel_timer(token)
     }
 }
@@ -215,27 +222,27 @@ mod vmm_api_impl {
     use super::*;
     use axvisor_api::vmm::{InterruptVector, VCpuId, VMId};
 
-    extern "C" fn current_vm_id() -> usize {
+    extern fn current_vm_id() -> usize {
         <AxVMHalImpl as AxVMHal>::current_vm_id()
     }
 
-    extern "C" fn current_vcpu_id() -> usize {
+    extern fn current_vcpu_id() -> usize {
         <AxVMHalImpl as AxVMHal>::current_vcpu_id()
     }
 
-    extern "C" fn vcpu_num(vm_id: VMId) -> Option<usize> {
+    extern fn vcpu_num(vm_id: VMId) -> Option<usize> {
         vmm::with_wm(vm_id, |vm| vm.vcpu_num())
     }
 
-    extern "C" fn active_vcpus(vm_id: VMId) -> Option<usize> {
+    extern fn active_vcpus(vm_id: VMId) -> Option<usize> {
         todo!("active_vcpus")
     }
 
-    extern "C" fn inject_interrupt(vm_id: VMId, vcpu_id: VCpuId, vector: InterruptVector) {
+    extern fn inject_interrupt(vm_id: VMId, vcpu_id: VCpuId, vector: InterruptVector) {
         <AxVMHalImpl as AxVMHal>::inject_irq_to_vcpu(vm_id, vcpu_id, vector as usize).unwrap();
     }
 
-    extern "C" fn notify_vcpu_timer_expired(vm_id: VMId, vcpu_id: VCpuId) {
+    extern fn notify_vcpu_timer_expired(vm_id: VMId, vcpu_id: VCpuId) {
         todo!("notify_vcpu_timer_expired")
         // vmm::timer::notify_timer_expired(vm_id, vcpu_id);
     }
@@ -243,21 +250,20 @@ mod vmm_api_impl {
 
 #[axvisor_api::api_mod_impl(axvisor_api::arch)]
 mod arch_api_impl {
-
     #[cfg(target_arch = "aarch64")]
-    extern "C" fn hardware_inject_virtual_interrupt(irq: axvisor_api::vmm::InterruptVector) {
+    extern fn hardware_inject_virtual_interrupt(irq: axvisor_api::vmm::InterruptVector) {
         use axstd::os::arceos::modules::axhal;
         axhal::irq::inject_interrupt(irq as usize);
     }
 
     #[cfg(target_arch = "aarch64")]
-    extern "C" fn read_vgicd_typer() -> u32 {
+    extern fn read_vgicd_typer() -> u32 {
         use axstd::os::arceos::modules::axhal::irq::MyVgic;
         MyVgic::get_gicd().lock().get_typer()
     }
 
     #[cfg(target_arch = "aarch64")]
-    extern "C" fn read_vgicd_iidr() -> u32 {
+    extern fn read_vgicd_iidr() -> u32 {
         use axstd::os::arceos::modules::axhal::irq::MyVgic;
         MyVgic::get_gicd().lock().get_iidr()
     }
