@@ -45,6 +45,8 @@ page_table_entry = { version = "0.5", features = ["arm-el2"] }
 page_table_multiarch = "0.5"
 percpu = { version = "0.2.0", features = ["arm-el2"] }
 
+fdt-parser = "0.4"
+
 [build-dependencies]
 toml = { git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std" }
 axconfig = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm" }

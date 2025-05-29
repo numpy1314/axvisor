@@ -167,7 +167,7 @@ dependencies = [
 [[package]]
 name = "arm_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arm_vcpu.git#e537c7b5125130e85b12a57390a251a86227c2ec"
+source = "git+https://github.com/arceos-hypervisor/arm_vcpu.git#4dd7e5df7949336a11936c50b99ab1c608871060"
 dependencies = [
  "aarch64-cpu 9.4.0",
  "aarch64_sysreg",
@@ -571,6 +571,7 @@ dependencies = [
  "bitflags 2.9.0",
  "cfg-if",
  "crate_interface",
+ "fdt-parser",
  "kspin",
  "lazyinit",
  "log",
@@ -878,6 +879,12 @@ dependencies = [
  "bitflags 2.9.0",
  "log",
 ]
+
+[[package]]
+name = "fdt-parser"
+version = "0.4.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d09dfa244d6891db105eefae4f3aa5752adcab254a95e24c17c3ebd76f6d77ba"
 
 [[package]]
 name = "getrandom"
