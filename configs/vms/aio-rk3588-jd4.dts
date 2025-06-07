@@ -5714,12 +5714,6 @@
 
 			cooling-maps {
 
-				map2 {
-					trip = <0x5e>;
-					cooling-device = <0x0c 0xffffffff 0xffffffff>;
-					contribution = <0x400>;
-				};
-
 				map0 {
 					trip = <0x5e>;
 					cooling-device = <0x06 0xffffffff 0xffffffff>;
@@ -5729,12 +5723,6 @@
 				map3 {
 					trip = <0x5e>;
 					cooling-device = <0x5f 0xffffffff 0xffffffff>;
-					contribution = <0x400>;
-				};
-
-				map1 {
-					trip = <0x5e>;
-					cooling-device = <0x0a 0xffffffff 0xffffffff>;
 					contribution = <0x400>;
 				};
 			};
