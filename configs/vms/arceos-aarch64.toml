@@ -22,7 +22,7 @@ entry_point = 0x4020_0000
 # Load from file system.
 image_location = "memory"
 # The file path of the kernel image.
-kernel_path = "/home/hky/workspace/arceos/axvisor/crates/arceos/examples/helloworld/helloworld_aarch64-qemu-virt_1.bin"
+kernel_path = "helloworld_aarch64-qemu-virt_1.bin"
 # The load address of the kernel image.
 kernel_load_addr = 0x4020_0000
 ## Load from memory
@@ -53,7 +53,7 @@ passthrough_devices = [
     ["pl011@9040000", 0x904_0000, 0x904_0000, 0x1000, 0x1],
     ["pl031@9010000", 0x901_0000, 0x901_0000, 0x1000, 0x1],
     ["pl061@9030000", 0x903_0000, 0x903_0000, 0x1000, 0x1],
-    # a003000.virtio_mmio virtio_mmio@a003000 
+    # a003000.virtio_mmio virtio_mmio@a003000
     # a003200.virtio_mmio virtio_mmio@a003200
     ["virtio_mmio", 0xa00_0000, 0xa00_0000, 0x4000, 0x1],
 ]
