@@ -1,3 +1,5 @@
+# Boot A Linux VM on the Firefly AIO-3588JD4 Board
+
 ## Setup TFTP Server
 
 ```bash
@@ -5,14 +7,14 @@ sudo apt-get install tftpd-hpa tftp-hpa
 sudo chmod 777 /srv/tftp
 ```
 
-judge if TFTP works
+Check if TFTP works
 
 ```bash
 echo "TFTP Server Test" > /srv/tftp/testfile.txt
 tftp localhost
 tftp> get testfile.txt
 tftp> quit
-cat testfile.txt 
+cat testfile.txt
 ```
 
 You should see `TFTP Server Test` on your screen.
@@ -20,18 +22,24 @@ You should see `TFTP Server Test` on your screen.
 ## Compile device tree
 
 ```bash
-dtc -o aio-rk3588-jd4.dtb -O dtb -I dts aio-rk3588-jd4.dts
+dtc -o configs/vms/aio-rk3588-jd4.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4.dts
 ```
 
 ## Prepare Linux kernel bianry
 
+Prepare RK3588 SDK following manufacturer's instruction, checkout the Linux kernel repository to this branch: https://github.com/arceos-hypervisor/firefly-linux-bsp/tree/axvisor-wip, then build the kernel.
+
+Copy the kernel and ramdisk image to AxVisor directory:
+
 ```bash
 scp xxx@192.168.xxx.xxx:/home/xxx/firefly_rk3588_SDK/kernel/arch/arm64/boot/Image configs/vms/Image.bin
+scp xxx@192.168.xxx.xxx:/home/xxx/firefly_rk3588_SDK/kernel/ramdisk.img configs/vms/ramdisk.img
 ```
 
 ## Compile AxVisor
 
 * get deps
+
 ```bash
 ./tool/dev_env.py
 cd crates/arceos && git checkout rk3588_jd4
@@ -58,7 +66,7 @@ cp axvisor_aarch64-rk3588j.img /srv/tftp/axvisor
 # 这是 tftp 服务器所在的主机 ip
 setenv serverip 192.168.50.97
 # 这是 rk3588 所在设备的 ip (Firefly Linux 自己 DHCP 拿到的地址)
-setenv ipaddr 192.168.50.8 
+setenv ipaddr 192.168.50.8
 # 使用 tftp 加载镜像到指定内存地址并 boot
 setenv serverip 192.168.50.97;setenv ipaddr 192.168.50.8;tftp 0x00480000 ${serverip}:axvisor;tftp 0x10000000 ${serverip}:rk3588_dtb.bin;bootm 0x00480000 - 0x10000000;
 ```
