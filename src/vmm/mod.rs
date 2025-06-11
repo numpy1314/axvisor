@@ -28,6 +28,7 @@ static VMM: AxWaitQueueHandle = AxWaitQueueHandle::new();
 static RUNNING_VM_COUNT: AtomicUsize = AtomicUsize::new(0);
 
 pub fn init() {
+    info!("Initializing VMM...");
     // Initialize guest VM according to config file.
     config::init_guest_vms();
 

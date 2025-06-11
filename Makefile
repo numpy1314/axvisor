@@ -39,6 +39,7 @@ SMP ?= 1
 MODE ?= release
 LOG ?= warn
 V ?=
+GICV3 ?= n
 EXTRA_CONFIG ?=
 OUT_CONFIG ?= $(PWD)/.axconfig.toml
 

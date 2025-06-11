@@ -129,6 +129,8 @@ pub(crate) fn enable_virtualization() {
 
     static CORES: AtomicUsize = AtomicUsize::new(0);
 
+    info!("Enabling hardware virtualization support on all cores...");
+
     for cpu_id in 0..config::SMP {
         thread::spawn(move || {
             // Initialize cpu affinity here.
@@ -136,6 +138,8 @@ pub(crate) fn enable_virtualization() {
                 ax_set_current_affinity(AxCpuMask::one_shot(cpu_id)).is_ok(),
                 "Initialize CPU affinity failed!"
             );
+
+            info!("Enabling hardware virtualization support on core {}", cpu_id);
 
             vmm::init_timer_percpu();
 
@@ -153,11 +157,15 @@ pub(crate) fn enable_virtualization() {
         });
     }
 
+    info!("Waiting for all cores to enable hardware virtualization...");
+
     // Wait for all cores to enable virtualization.
     while CORES.load(Ordering::Acquire) != config::SMP {
         // Use `yield_now` instead of `core::hint::spin_loop` to avoid deadlock.
         thread::yield_now();
     }
+
+    info!("All cores have enabled hardware virtualization support.");
 }
 
 #[axvisor_api::api_mod_impl(axvisor_api::memory)]
@@ -265,24 +273,39 @@ mod arch_api_impl {
 
     #[cfg(target_arch = "aarch64")]
     extern fn read_vgicd_typer() -> u32 {
-        use axstd::os::arceos::modules::axhal::irq::MyVgic;
-        MyVgic::get_gicd().lock().get_typer()
+        // use axstd::os::arceos::modules::axhal::irq::MyVgic;
+        // MyVgic::get_gicd().lock().get_typer()
+
+        use std::os::arceos::modules::{axconfig, axhal};
+        use memory_addr::pa;
+
+        let typer_phys_addr = axconfig::devices::GICD_PADDR + 0x4;
+        let typer_virt_addr = axhal::mem::phys_to_virt(pa!(typer_phys_addr));
+
+        unsafe {
+            core::ptr::read_volatile(typer_virt_addr.as_ptr_of::<u32>())
+        }
     }
 
     #[cfg(target_arch = "aarch64")]
     extern fn read_vgicd_iidr() -> u32 {
-        use axstd::os::arceos::modules::axhal::irq::MyVgic;
-        MyVgic::get_gicd().lock().get_iidr()
+        // use axstd::os::arceos::modules::axhal::irq::MyVgic;
+        // MyVgic::get_gicd().lock().get_iidr()
+0
     }
 
     #[cfg(target_arch = "aarch64")]
     extern fn get_host_gicd_base() -> memory_addr::PhysAddr {
-        unimplemented!()
+        use std::os::arceos::api::config;
+
+        config::devices::GICD_PADDR.into()
     }
 
     #[cfg(target_arch = "aarch64")]
     extern fn get_host_gicr_base() -> memory_addr::PhysAddr {
-        unimplemented!()
+        use std::os::arceos::api::config;
+
+        config::devices::GICR_PADDR.into()
     }
 }
 
