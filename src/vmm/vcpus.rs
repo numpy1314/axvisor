@@ -1,10 +1,7 @@
 use alloc::{collections::BTreeMap, vec::Vec};
 
-use core::sync::atomic::{AtomicUsize, Ordering};
-use std::os::arceos::{
-    api::task::{AxCpuMask, ax_wait_queue_wake},
-    modules::axtask,
-};
+use std::os::arceos::api;
+use std::os::arceos::modules::{axhal, axtask};
 
 use axaddrspace::GuestPhysAddr;
 use axtask::{AxTaskRef, TaskExtRef, TaskInner, WaitQueue};
@@ -230,6 +227,24 @@ pub fn setup_vm_primary_vcpu(vm: VMRef) {
     }
 }
 
+/// Finds the [`AxTaskRef`] associated with the specified vCPU of the specified VM.
+pub fn find_vcpu_task(vm_id: usize, vcpu_id: usize) -> Option<AxTaskRef> {
+    with_vcpu_task(vm_id, vcpu_id, |task| task.clone())
+}
+
+/// Executes the provided closure with the [`AxTaskRef`] associated with the specified vCPU of the specified VM.
+pub fn with_vcpu_task<T, F: FnOnce(&AxTaskRef) -> T>(
+    vm_id: usize,
+    vcpu_id: usize,
+    f: F,
+) -> Option<T> {
+    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
+        .unwrap()
+        .vcpu_task_list
+        .get(vcpu_id)
+        .map(f)
+}
+
 /// Allocates arceos task for vcpu, set the task's entry function to [`vcpu_run()`],
 /// also initializes the CPU mask if the VCpu has a dedicated physical CPU set.
 ///
@@ -292,6 +307,18 @@ fn vcpu_run() {
             Ok(exit_reason) => match exit_reason {
                 AxVCpuExitReason::Hypercall { nr, args } => {
                     debug!("Hypercall [{}] args {:x?}", nr, args);
+
+                    if nr == 0xf785 && args[0] == 0xdead_beaf_1234_5678 {
+                        debug!(
+                            "VM[{}] Vcpu[{}] send mock interrupt injection vmcall",
+                            vm_id, vcpu_id
+                        );
+
+                        // vm.inject_interrupt_to_vcpu(cpumask::CpuMask::one_shot(vcpu_id), 0x66)
+                        //     .unwrap();
+                    }
+
+                    vcpu.set_gpr(0, !args[1] as _);
                 }
                 AxVCpuExitReason::FailEntry {
                     hardware_entry_failure_reason,
@@ -303,6 +330,10 @@ fn vcpu_run() {
                 }
                 AxVCpuExitReason::ExternalInterrupt { vector } => {
                     debug!("VM[{}] run VCpu[{}] get irq {}", vm_id, vcpu_id, vector);
+
+                    // TODO: maybe move this irq dispatcher to lower layer to accelerate the interrupt handling
+                    axhal::irq::handler_irq(vector as usize);
+                    super::timer::check_events();
                 }
                 AxVCpuExitReason::Halt => {
                     debug!("VM[{}] run VCpu[{}] Halt", vm_id, vcpu_id);
