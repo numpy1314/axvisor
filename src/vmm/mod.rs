@@ -1,32 +1,36 @@
 mod config;
+mod hvc;
 mod images;
 mod mock;
 pub mod timer;
+mod ivc;
 mod vcpus;
 mod vm_list;
 
-use std::os::arceos::api::task::{self, AxWaitQueueHandle};
 
-use core::sync::atomic::AtomicUsize;
-use core::sync::atomic::Ordering;
-use std::os::arceos::modules::axhal;
-use std::os::arceos::modules::axtask;
-use std::os::arceos::modules::axtask::TaskExtRef;
+use core::sync::atomic::{AtomicUsize, Ordering};
+use std::os::arceos::{api::task::{self, AxWaitQueueHandle}, modules::{axhal, axtask::{self, TaskExtRef}}};
 
 use axerrno::{AxResult, ax_err_type};
 
 use crate::hal::{AxVCpuHalImpl, AxVMHalImpl};
 pub use timer::init_percpu as init_timer_percpu;
 
+/// The instantiated VM type.
 pub type VM = axvm::AxVM<AxVMHalImpl, AxVCpuHalImpl>;
+/// The instantiated VM ref type (by `Arc`).
 pub type VMRef = axvm::AxVMRef<AxVMHalImpl, AxVCpuHalImpl>;
-
+/// The instantiated VCpu ref type (by `Arc`).
 pub type VCpuRef = axvm::AxVCpuRef<AxVCpuHalImpl>;
 
 static VMM: AxWaitQueueHandle = AxWaitQueueHandle::new();
 
+/// The number of running VMs. This is used to determine when to exit the VMM.
 static RUNNING_VM_COUNT: AtomicUsize = AtomicUsize::new(0);
 
+/// Initialize the VMM.
+///
+/// This function creates the VM structures and sets up the primary VCpu for each VM.
 pub fn init() {
     info!("Initializing VMM...");
     // Initialize guest VM according to config file.
@@ -39,6 +43,7 @@ pub fn init() {
     }
 }
 
+/// Start the VMM.
 pub fn start() {
     info!("VMM starting, booting VMs...");
     for vm in vm_list::get_vm_list() {
@@ -53,7 +58,15 @@ pub fn start() {
     }
 
     // Do not exit until all VMs are stopped.
-    task::ax_wait_queue_wait_until(&VMM, || RUNNING_VM_COUNT.load(Ordering::Acquire) == 0, None);
+    task::ax_wait_queue_wait_until(
+        &VMM,
+        || {
+            let vm_count = RUNNING_VM_COUNT.load(Ordering::Acquire);
+            info!("a VM exited, current running VM count: {}", vm_count);
+            vm_count == 0
+        },
+        None,
+    );
 }
 
 #[allow(unused_imports)]

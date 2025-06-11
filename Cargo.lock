@@ -221,7 +221,6 @@ checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 [[package]]
 name = "axaddrspace"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axaddrspace.git#2ed4d076e01f966710bd6480131abd3a9ffb8930"
 dependencies = [
  "axerrno",
  "bit_field",
@@ -485,6 +484,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "axhvc"
+version = "0.1.0"
+dependencies = [
+ "axerrno",
+ "bit_field",
+ "numeric-enum-macro",
+]
+
+[[package]]
 name = "axio"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -624,6 +632,7 @@ dependencies = [
  "axdevice",
  "axdevice_base",
  "axerrno",
+ "axhvc",
  "axstd",
  "axvcpu",
  "axvisor_api",
@@ -632,6 +641,9 @@ dependencies = [
  "cpumask",
  "crate_interface",
  "kernel_guard",
+ "cfg-if",
+ "crate_interface",
+ "fdt-parser",
  "kspin",
  "lazyinit",
  "log",
@@ -965,6 +977,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fdt-parser"
+version = "0.4.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d09dfa244d6891db105eefae4f3aa5752adcab254a95e24c17c3ebd76f6d77ba"
+
+[[package]]
 name = "getrandom"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1174,8 +1192,6 @@ checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 [[package]]
 name = "page_table_entry"
 version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c097d641745a066856a26eed6e486d4430bb3e32c94f1203ea09c63239b360a0"
 dependencies = [
  "aarch64-cpu 10.0.0",
  "bitflags 2.9.0",
@@ -1186,8 +1202,6 @@ dependencies = [
 [[package]]
 name = "page_table_multiarch"
 version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4647889585d29762d747be0916d6d28db72967a697d142be86f187a6b496832a"
 dependencies = [
  "log",
  "memory_addr",
@@ -1959,3 +1973,7 @@ dependencies = [
  "quote",
  "syn 2.0.100",
 ]
+
+[[patch.unused]]
+name = "arm_vgic"
+version = "0.0.0"
