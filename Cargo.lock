@@ -167,7 +167,7 @@ dependencies = [
 [[package]]
 name = "arm_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arm_vcpu.git?branch=inject_interrupt_vgicv3#1fb5ac158dca756fb94d7fb03f8182da5f20cce2"
+source = "git+https://github.com/arceos-hypervisor/arm_vcpu.git?branch=inject_interrupt_vgicv3_ivc#f8e65147cf8801f590678388c05b005044fe3522"
 dependencies = [
  "aarch64-cpu 9.4.0",
  "aarch64_sysreg",
@@ -175,7 +175,7 @@ dependencies = [
  "axaddrspace",
  "axdevice_base",
  "axerrno",
- "axvcpu",
+ "axvcpu 0.1.0 (git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt_vgicv3_ivc)",
  "axvisor_api",
  "log",
  "numeric-enum-macro",
@@ -624,6 +624,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "axvcpu"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt_vgicv3_ivc#aed8ed74c9be9bd0c0a71a8a38bf5a144540f87f"
+dependencies = [
+ "axaddrspace",
+ "axerrno",
+ "memory_addr",
+ "percpu",
+]
+
+[[package]]
 name = "axvisor"
 version = "0.1.0"
 dependencies = [
@@ -634,16 +645,15 @@ dependencies = [
  "axerrno",
  "axhvc",
  "axstd",
- "axvcpu",
+ "axvcpu 0.1.0 (git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt_vgicv3_ivc)",
  "axvisor_api",
  "axvm",
  "bitflags 2.9.0",
+ "cfg-if",
  "cpumask",
  "crate_interface",
- "kernel_guard",
- "cfg-if",
- "crate_interface",
  "fdt-parser",
+ "kernel_guard",
  "kspin",
  "lazyinit",
  "log",
@@ -684,14 +694,13 @@ dependencies = [
 [[package]]
 name = "axvm"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axvm.git?branch=inject_interrupt_vgicv3#02b4e6d49ac7386caad8f8724532580c4c87fd1f"
 dependencies = [
  "arm_vcpu",
  "axaddrspace",
  "axdevice",
  "axdevice_base",
  "axerrno",
- "axvcpu",
+ "axvcpu 0.1.0 (git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt_vgicv3_ivc)",
  "axvmconfig",
  "cfg-if",
  "cpumask",
@@ -1192,6 +1201,8 @@ checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 [[package]]
 name = "page_table_entry"
 version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c097d641745a066856a26eed6e486d4430bb3e32c94f1203ea09c63239b360a0"
 dependencies = [
  "aarch64-cpu 10.0.0",
  "bitflags 2.9.0",
@@ -1202,6 +1213,8 @@ dependencies = [
 [[package]]
 name = "page_table_multiarch"
 version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4647889585d29762d747be0916d6d28db72967a697d142be86f187a6b496832a"
 dependencies = [
  "log",
  "memory_addr",
@@ -1427,7 +1440,7 @@ source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git?branch=inject_
 dependencies = [
  "axaddrspace",
  "axerrno",
- "axvcpu",
+ "axvcpu 0.1.0 (git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt)",
  "bit_field",
  "bitflags 2.9.0",
  "cfg-if",
@@ -1921,7 +1934,7 @@ dependencies = [
  "axaddrspace",
  "axdevice_base",
  "axerrno",
- "axvcpu",
+ "axvcpu 0.1.0 (git+https://github.com/arceos-hypervisor/axvcpu.git?branch=inject_interrupt)",
  "bit_field",
  "bitflags 2.9.0",
  "cfg-if",
@@ -1973,7 +1986,3 @@ dependencies = [
  "quote",
  "syn 2.0.100",
 ]
-
-[[patch.unused]]
-name = "arm_vgic"
-version = "0.0.0"
