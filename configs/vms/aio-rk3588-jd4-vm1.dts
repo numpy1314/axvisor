@@ -3553,13 +3553,6 @@
 			#msi-cells = <0x01>;
 		};
 
-		msi-controller@fe660000 {
-			msi-controller;
-			compatible = "arm,gic-v3-its";
-			reg = <0x00 0xfe660000 0x00 0x20000>;
-			phandle = <0x1b6>;
-			#msi-cells = <0x01>;
-		};
 	};
 
 	pcie-essd {
@@ -9433,8 +9426,8 @@
 	};
 
 	chosen {
-		linux,initrd-end = <0x00 0xaac72ae>;
-		bootargs = "storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  storagenode=/mmc@fe2e0000 androidboot.verifiedbootstate=orange ro rootwait console=ttyS1,115200n8 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs rootfstype=ext4 overlayroot=device:dev=PARTLABEL=userdata,fstype=ext4,mkfs=1 coherent_pool=1m systemd.gpt_auto=0 cgroup_enable=memory swapaccount=1 net.ifnames=0 rcupdate.rcu_expedited=0 comm-05/28/2025 androidboot.fwver=ddr-v1.15-d5483af87d,spl-v1.13,bl31-v1.44,bl32-v1.15,uboot--boot";
+		linux,initrd-end = <0x00 0xaac8000>;
+		bootargs = "storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  storagenode=/mmc@fe2e0000 androidboot.verifiedbootstate=orange ro rootwait console=ttyS1,115200n8 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs rootfstype=ext4 overlayroot=device:dev=PARTLABEL=userdata,fstype=ext4,mkfs=1 coherent_pool=1m systemd.gpt_auto=0 cgroup_enable=memory swapaccount=1 net.ifnames=0 rcupdate.rcu_expedited=0 comm-05/28/2025 androidboot.fwver=ddr-v1.15-d5483af87d,spl-v1.13,bl31-v1.44,bl32-v1.15,uboot--boot clk_ignore_unused";
 		linux,initrd-start = <0x00 0xa200000>;
 		phandle = <0x48d>;
 	};
@@ -12620,12 +12613,11 @@
 		reset-names = "srst_csihost_p";
 	};
 
-	// DTB memory region: { address: 0x9400000, size: 0xe6c00000 } 3.6G
-	// DTB memory region: { address: 0x2f0000000, size: 0x10000000 } 256M
+	// DTB memory region: { address: 0x0940_0000, size: 0xc6c0_0000 } ~3.3G
 
 	memory {
 		device_type = "memory";
-		reg = <0x00 0x9400000 0x00 0xe6c00000 0x02 0xf0000000 0x00 0x10000000 >;
+		reg = <0x00 0x9400000 0x00 0xc6c00000>;
 	};
 
 	jpege-core@fdba4000 {

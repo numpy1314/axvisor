@@ -10,14 +10,19 @@
 
 	chosen {
 		linux,initrd-start = <0x01 0x0a200000>;
-		linux,initrd-end = <0x01 0x0a320410>;
-		bootargs = "rw earlycon=uart8250,mmio32,0xfeb50000 console=ttyS2,115200n8 irqchip.gicv3_pseudo_nmi=0 initcall_debug";
+		linux,initrd-end = <0x01 0xaac8000>;
+		// **Replace <server_ip>:<root-dir> with your own NFS server IP and rootfs export path!**
+		bootargs = "rw earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=/dev/nfs nfsroot=<server_ip>:<root-dir>";
 		phandle = <0x48d>;
 	};
 
+	// DTB memory region: { address: 0xe000_0000, size: 0x1000_0000 } 256M
+	// DTB memory region: { address: 0x1_0000_0000, size: 0xe000_0000 } 3.7G
+
+
 	memory {
 		device_type = "memory";
-		reg = <0x01 0x00000000 0x00 0xe0000000 >;
+		reg = <0x00 0xe0000000 0x00 0x10000000 0x01 0x00000000 0x00 0xe0000000>;
 	};
 
 	cpus {
@@ -148,7 +153,7 @@
 		compatible = "arm,gic-v3";
 		ranges;
 		#interrupt-cells = <0x03>;
-		reg = <0x00 0xfe600000 0x00 0x10000 0x00 0xfe680000 0x00 0x100000>;
+		reg = <0x00 0xfe600000 0x00 0x10000 0x00 0xfe6a0000 0x00 0x100000>;
 		phandle = <0x01>;
 		interrupt-controller;
 
@@ -159,25 +164,198 @@
 		compatible = "arm,psci-1.0";
 	};
 
+	// dummy clocks that are configured by VM1
+	clocks {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		compatible = "simple-bus";
+		ranges;
+
+		// serial
+		serial_baud_24m {
+			clock-output-names = "serial_baud_24m";
+			compatible = "fixed-clock";
+			clock-frequency = <24000000>;
+			#clock-cells = <0>;
+			phandle = <0xbb>;
+		};
+
+		serial_pclk_100m {
+			clock-output-names = "serial_pclk_100m";
+			compatible = "fixed-clock";
+			clock-frequency = <100000000>;
+			#clock-cells = <0>;
+			phandle = <0xac>;
+		};
+
+		// ethernet
+		gmac_125m {
+			clock-output-names = "gmac_125m";
+			compatible = "fixed-clock";
+			clock-frequency = <125000000>;
+			#clock-cells = <0>;
+			phandle = <0x144>;
+		};
+
+		gmac_50m {
+			clock-output-names = "gmac_50m";
+			compatible = "fixed-clock";
+			clock-frequency = <50000000>;
+			#clock-cells = <0>;
+			phandle = <0x145>;
+		};
+
+		gmac1_pclk_150m {
+			clock-output-names = "gmac1_pclk_150m";
+			compatible = "fixed-clock";
+			clock-frequency = <150000000>;
+			#clock-cells = <0>;
+			phandle = <0x168>;
+		};
+
+		gmac1_aclk_396m {
+			clock-output-names = "gmac1_aclk_396m";
+			compatible = "fixed-clock";
+			clock-frequency = <396000000>;
+			#clock-cells = <0>;
+			phandle = <0x16d>;
+		};
+
+		gmac1_ptp_ref_100m {
+			clock-output-names = "gmac1_ptp_ref_100m";
+			compatible = "fixed-clock";
+			clock-frequency = <100000000>;
+			#clock-cells = <0>;
+			phandle = <0x143>;
+		};
+	};
+
 	serial@feb50000 {
 		reg-io-width = <0x04>;
 		pinctrl-names = "default";
 		pinctrl-0 = <0x161>;
 		interrupts = <0x00 0x14d 0x04>;
 		// Avoid driver messing with CRU
-		clock-frequency = <24000000>;
-		// clock-names = "baudclk\0apb_pclk";
-		// clocks = <0x02 0xbb 0x02 0xac>;
+		clock-names = "baudclk\0apb_pclk";
+		clocks = <0xbb 0xac>;
 		compatible = "rockchip,rk3588-uart\0snps,dw-apb-uart";
-		status = "okay";
+		status = "disabled";
 		reg = <0x00 0xfeb50000 0x00 0x100>;
 		phandle = <0x2ca>;
 		dmas = <0x7c 0x0a 0x7c 0x0b>;
 		reg-shift = <0x02>;
 	};
 
+	fiq-debugger {
+		pinctrl-names = "default";
+		rockchip,irq-mode-enable = <0x01>;
+		rockchip,baudrate = <0x1c200>;
+		pinctrl-0 = <0x1ce>;
+		interrupts = <0x00 0x1a7 0x08>;
+		rockchip,wake-irq = <0x00>;
+		compatible = "rockchip,fiq-debugger";
+		status = "okay";
+		phandle = <0x490>;
+		rockchip,serial-id = <0x02>;
+	};
+
+	syscon@fd5b0000 {
+		compatible = "rockchip,rk3588-php-grf\0syscon";
+		reg = <0x00 0xfd5b0000 0x00 0x1000>;
+		phandle = <0x76>;
+	};
+
+	syscon@fd58c000 {
+		compatible = "rockchip,rk3588-sys-grf\0syscon\0simple-mfd";
+		reg = <0x00 0xfd58c000 0x00 0x1000>;
+		phandle = <0xc8>;
+	};
+
+
+	ethernet@fe1c0000 {
+		power-domains = <0x60 0x21>;
+		pinctrl-names = "default";
+		phy-mode = "rgmii-rxid";
+		snps,mixed-burst;
+		snps,mtl-rx-config = <0x10b>;
+		pinctrl-0 = <0x10e 0x10f 0x110 0x111 0x112>;
+		clock-names = "stmmaceth\0clk_mac_ref\0pclk_mac\0aclk_mac\0ptp_ref";
+		snps,mtl-tx-config = <0x10c>;
+		local-mac-address = [a6 50 47 45 20 ee];
+		interrupt-names = "macirq\0eth_wake_irq";
+		interrupts = <0x00 0xea 0x04 0x00 0xe9 0x04>;
+		clocks = <0x144 0x145 0x168 0x16d 0x143>;
+		clock_in_out = "output";
+		snps,tso;
+		compatible = "rockchip,rk3588-gmac\0snps,dwmac-4.20a";
+		status = "okay";
+		rockchip,grf = <0xc8>;
+		// reset-names = "stmmaceth";
+		// resets = <0x02 0x20b>;
+		// snps,reset-active-low;
+		// snps,reset-gpio = <0x10d 0x08 0x01>;
+		// snps,reset-delays-us = <0x00 0x4e20 0x186a0>;
+		reg = <0x00 0xfe1c0000 0x00 0x10000>;
+		rockchip,php_grf = <0x76>;
+		phandle = <0x109>;
+		phy-handle = <0x113>;
+		tx_delay = <0x40>;
+		snps,axi-config = <0x10a>;
+
+		mdio {
+			#address-cells = <0x01>;
+			#size-cells = <0x00>;
+			compatible = "snps,dwmac-mdio";
+			phandle = <0x28f>;
+
+			phy@1 {
+				compatible = "ethernet-phy-ieee802.3-c22";
+				reg = <0x01>;
+				phandle = <0x113>;
+			};
+		};
+
+		tx-queues-config {
+			phandle = <0x10c>;
+			snps,tx-queues-to-use = <0x01>;
+
+			queue0 {
+			};
+		};
+
+		stmmac-axi-config {
+			snps,wr_osr_lmt = <0x04>;
+			phandle = <0x10a>;
+			snps,blen = <0x00 0x00 0x00 0x00 0x10 0x08 0x04>;
+			snps,rd_osr_lmt = <0x08>;
+		};
+
+		rx-queues-config {
+			snps,rx-queues-to-use = <0x01>;
+			phandle = <0x10b>;
+
+			queue0 {
+			};
+		};
+	};
+
+	reserved-memory {
+		#address-cells = <0x02>;
+		#size-cells = <0x02>;
+		ranges;
+
+		cma {
+			linux,cma-default;
+			compatible = "shared-dma-pool";
+			size = <0x00 0x800000>;
+			reusable;
+		};
+	};
+
 	aliases {
 		serial2 = "/serial@feb50000";
+		ethernet1 = "/ethernet@fe1c0000";
+		mmc1 = "/mmc@fe2c0000";
 	};
 
 	__symbols__ {
@@ -189,6 +367,14 @@
 		scmi = "/firmware/scmi";
 		scmi_reset = "/firmware/scmi/protocol@16";
 		scmi_clk = "/firmware/scmi/protocol@14";
+
+		gmac1 = "/ethernet@fe1c0000";
+		mdio1 = "/ethernet@fe1c0000/mdio";
+		rgmii_phy1 = "/ethernet@fe1c0000/mdio/phy@1";
+		gmac1_mtl_rx_setup = "/ethernet@fe1c0000/rx-queues-config";
+		gmac1_mtl_tx_setup = "/ethernet@fe1c0000/tx-queues-config";
+		gmac1_stmmac_axi_setup = "/ethernet@fe1c0000/stmmac-axi-config";
+
 	};
 
 	syscon@fd5f0000 {
@@ -230,6 +416,59 @@
 			uart2m2-xfer {
 				rockchip,pins = <0x03 0x0a 0x0a 0x19e 0x03 0x09 0x0a 0x19e>;
 				phandle = <0x425>;
+			};
+		};
+
+		gmac1 {
+
+			gmac1-rgmii-clk {
+				rockchip,pins = <0x03 0x05 0x01 0x198 0x03 0x04 0x01 0x198>;
+				phandle = <0x111>;
+			};
+
+			gmac1-rx-bus2 {
+				rockchip,pins = <0x03 0x07 0x01 0x198 0x03 0x08 0x01 0x198 0x03 0x09 0x01 0x198>;
+				phandle = <0x110>;
+			};
+
+			gmac1-txer {
+				rockchip,pins = <0x03 0x0a 0x01 0x198>;
+				phandle = <0x332>;
+			};
+
+			gmac1-clkinout {
+				rockchip,pins = <0x03 0x0e 0x01 0x198>;
+				phandle = <0x32e>;
+			};
+
+			gmac1-ptp-ref-clk {
+				rockchip,pins = <0x03 0x0f 0x01 0x198>;
+				phandle = <0x331>;
+			};
+
+			gmac1-ppsclk {
+				rockchip,pins = <0x03 0x11 0x01 0x198>;
+				phandle = <0x32f>;
+			};
+
+			gmac1-ppstrig {
+				rockchip,pins = <0x03 0x10 0x01 0x198>;
+				phandle = <0x330>;
+			};
+
+			gmac1-rgmii-bus {
+				rockchip,pins = <0x03 0x02 0x01 0x198 0x03 0x03 0x01 0x198 0x03 0x00 0x01 0x19a 0x03 0x01 0x01 0x19a>;
+				phandle = <0x112>;
+			};
+
+			gmac1-tx-bus2 {
+				rockchip,pins = <0x03 0x0b 0x01 0x19a 0x03 0x0c 0x01 0x19a 0x03 0x0d 0x01 0x198>;
+				phandle = <0x10f>;
+			};
+
+			gmac1-miim {
+				rockchip,pins = <0x03 0x12 0x01 0x198 0x03 0x13 0x01 0x198>;
+				phandle = <0x10e>;
 			};
 		};
 
