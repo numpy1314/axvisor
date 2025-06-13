@@ -92,6 +92,71 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
             }
         }
 
+        // Skip the interrupt controller, as we will use vGIC
+        // TODO: filter with compatible property and parse its phandle from DT; maybe needs a second pass?
+        const GIC_PHANDLE: usize = 1;
+        if name.starts_with("interrupt-controller") {
+            info!("skipping node {} to use vGIC", name);
+            continue;
+        }
+
+        // Collect all GIC_SPI interrupts and add them to vGIC
+        if let Some(interrupts) = node.interrupts() {
+            // TODO: skip non-GIC interrupt
+            if let Some(parent) = node.interrupt_parent() {
+                trace!("node: {}, intr parent: {}", name, parent.node.name());
+                if let Some(phandle) = parent.node.phandle() {
+                    if phandle.as_usize() != GIC_PHANDLE {
+                        warn!(
+                            "node: {}, intr parent: {}, phandle: 0x{:x} is not GIC!",
+                            name,
+                            parent.node.name(),
+                            phandle.as_usize()
+                        );
+                    }
+                } else {
+                    warn!(
+                        "node: {}, intr parent: {} no phandle!",
+                        name,
+                        parent.node.name(),
+                    );
+                }
+            } else {
+                warn!("node: {} no interrupt parent!", name);
+            }
+
+            trace!("node: {} interrupts:", name);
+
+            for interrupt in interrupts {
+                // <GIC_SPI/GIC_PPI, IRQn, trigger_mode>
+                for (k, v) in interrupt.enumerate() {
+                    match k {
+                        0 => {
+                            if v == 0 {
+                                trace!("node: {}, GIC_SPI", name);
+                            } else {
+                                warn!(
+                                    "node: {}, intr type: {}, not GIC_SPI, not supported!",
+                                    name, v
+                                );
+                                break;
+                            }
+                        }
+                        1 => {
+                            trace!("node: {}, interrupt id: 0x{:x}", name, v);
+                            vm_cfg.add_pass_through_spi(v);
+                        }
+                        2 => {
+                            trace!("node: {}, interrupt mode: 0x{:x}", name, v);
+                        }
+                        _ => {
+                            warn!("unknown interrupt property {}:0x{:x}", k, v)
+                        }
+                    }
+                }
+            }
+        }
+
         if let Some(regs) = node.reg() {
             for reg in regs {
                 if reg.address < 0x1000 {
