@@ -10262,6 +10262,25 @@
 			phandle = <0x06>;
 		};
 
+		cpu@100 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a55";
+			reg = <0x100>;
+			enable-method = "psci";
+			capacity-dmips-mhz = <0x212>;
+			clocks = <0x0e 0x00>;
+			operating-points-v2 = <0x0f>;
+			cpu-idle-states = <0x10>;
+			i-cache-size = <0x8000>;
+			i-cache-line-size = <0x40>;
+			i-cache-sets = <0x80>;
+			d-cache-size = <0x8000>;
+			d-cache-line-size = <0x40>;
+			d-cache-sets = <0x80>;
+			next-level-cache = <0x13>;
+			phandle = <0x07>;
+		};
+
 		l2-cache-l0 {
 			compatible = "cache";
 			cache-size = <0x20000>;
@@ -10269,6 +10288,15 @@
 			cache-line-size = <0x40>;
 			next-level-cache = <0x1e>;
 			phandle = <0x11>;
+		};
+
+		l2-cache-l1 {
+			compatible = "cache";
+			cache-size = <0x20000>;
+			cache-line-size = <0x40>;
+			cache-sets = <0x200>;
+			next-level-cache = <0x1e>;
+			phandle = <0x13>;
 		};
 
 		l3-cache {
@@ -10297,6 +10325,10 @@
 			cluster0 {
 				core0 {
 					cpu = <0x06>;
+				};
+
+				core1 {
+					cpu = <0x07>;
 				};
 			};
 		};
