@@ -73,8 +73,8 @@ cd crates/arceos && git checkout rk3588_jd4
 * compile
 
 ```bash
-make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml SMP=2 defconfig
-make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml VM_CONFIGS=configs/vms/linux-rk3588-aarch64-smp-vm1.toml:configs/vms/linux-rk3588-aarch64-smp-vm2.toml LOG=debug GICV3=y upload
+make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml SMP=4 defconfig
+make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml SMP=4 VM_CONFIGS=configs/vms/linux-rk3588-aarch64-smp-vm1.toml:configs/vms/linux-rk3588-aarch64-smp-vm2.toml LOG=debug GICV3=y upload
 ```
 
 * copy to tftp dir (make xxx upload will copy the image to `/srv/tftp/axvisor` automatically)
@@ -102,4 +102,5 @@ The VM1 output goes to the RS232 on the board (ttyS1 in Linux and serial@feb4000
 
 ## Known Issues
 
-- Resets of the ethernet in VM2 is not working, and reconfigure the NIC (e.g. with NetworkManager) may cause the VM2 to hang. Currently the initramfs will attempt to autoconfig the eth port then mount NFS as the rootfs. You may override the configuration with `ip=` kernel bootarg.
+* Resets of the ethernet in VM2 is not working, and reconfigure the NIC (e.g. with NetworkManager) may cause the VM2 to hang. Currently the initramfs will attempt to autoconfig the eth port then mount NFS as the rootfs. You may override the configuration with `ip=` kernel bootarg.
+* Execute `reboot` in either VM would reset the whole board, which may be unexpected for the other VM. You may `shutdown` VM2 first, then do shutdown or reboot in VM1.
