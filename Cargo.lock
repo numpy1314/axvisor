@@ -173,7 +173,7 @@ dependencies = [
  "axdevice_base",
  "axerrno",
  "axvcpu",
- "axvisor_api",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
  "log",
  "numeric-enum-macro",
  "percpu",
@@ -189,7 +189,7 @@ dependencies = [
  "axaddrspace",
  "axdevice_base",
  "axerrno",
- "axvisor_api",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
  "bitmaps",
  "log",
  "memory_addr",
@@ -472,6 +472,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "axhvc"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axhvc.git?branch=ivc#29ca8af1e2db294b9f266ec43a3989c36f2e23b4"
+dependencies = [
+ "axerrno",
+ "bit_field",
+ "numeric-enum-macro",
+]
+
+[[package]]
 name = "axio"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -602,9 +612,10 @@ dependencies = [
  "axdevice",
  "axdevice_base",
  "axerrno",
+ "axhvc",
  "axstd",
  "axvcpu",
- "axvisor_api",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
  "axvm",
  "bitflags 2.9.0",
  "cfg-if",
@@ -633,7 +644,17 @@ version = "0.1.0"
 source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#a40fbf91fe582edae2b1fea274c52aab8804f97d"
 dependencies = [
  "axaddrspace",
- "axvisor_api_proc",
+ "axvisor_api_proc 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
+ "crate_interface",
+ "memory_addr",
+]
+
+[[package]]
+name = "axvisor_api"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#ebb860c795a4d2e828b8595dca5ad9dff84e4883"
+dependencies = [
+ "axvisor_api_proc 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git)",
  "crate_interface",
  "memory_addr",
 ]
@@ -642,6 +663,17 @@ dependencies = [
 name = "axvisor_api_proc"
 version = "0.1.0"
 source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#a40fbf91fe582edae2b1fea274c52aab8804f97d"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+]
+
+[[package]]
+name = "axvisor_api_proc"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#ebb860c795a4d2e828b8595dca5ad9dff84e4883"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -1390,11 +1422,12 @@ dependencies = [
 [[package]]
 name = "riscv_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git?branch=inject_interrupt#7614ffff7e164661d6894a71628d4634914fc93f"
+source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git?branch=inject_interrupt_vgicv3_ivc#30c743b825778fd740c8e09988872e8a818ffe47"
 dependencies = [
  "axaddrspace",
  "axerrno",
  "axvcpu",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git)",
  "bit_field",
  "bitflags 2.9.0",
  "cfg-if",
@@ -1912,7 +1945,7 @@ dependencies = [
  "axaddrspace",
  "axdevice_base",
  "axerrno",
- "axvisor_api",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
  "bit",
  "log",
  "memory_addr",
