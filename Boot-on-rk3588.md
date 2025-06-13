@@ -1,4 +1,4 @@
-# Boot A Linux VM on the Firefly AIO-3588JD4 Board
+# Boot Two Linux VMs on the Firefly AIO-3588JD4 Board
 
 ## Setup TFTP Server
 
@@ -19,10 +19,35 @@ cat testfile.txt
 
 You should see `TFTP Server Test` on your screen.
 
-## Compile device tree
+## Setup an NFS Server for the rootfs of VM2
 
 ```bash
-dtc -o configs/vms/aio-rk3588-jd4.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4.dts
+sudo apt install nfs-kernel-server
+sudo mkdir -p /srv/nfs/firefly-rootfs
+# Download rootfs image from firefly wiki, assume rootfs.img
+# expand image and partition
+sudo dd if=/dev/zero of=rootfs.img bs=1M count=0 seek=16384
+# ... will show which loop device the image is mounted on, assume loopX
+sudo losetup -f --show rootfs.img
+sudo e2fsck -f /dev/loopX && sudo resize2fs /dev/loopX
+sudo losetup -D /dev/loopX
+# now mount the image file to rootfs path
+sudo mount -t loop rootfs.img /srv/nfs/firefly-rootfs
+# Add to NFS exports
+sudo cat <<EOF >> /etc/exports
+/srv/nfs        192.168.XXX.0/24(rw,async,no_subtree_check,fsid=0)
+/srv/nfs/firefly-rootfs 192.168.XXX.0/24(rw,async,no_subtree_check,no_root_squash)
+EOF
+sudo exportfs -ar
+```
+
+## Compile device tree
+
+Before compiling the DTS, edit the bootargs in `aio-rk3588-jd4-vm2.dts` and replace `<server_ip>:<root-dir>` with your own NFS server IP and rootfs export path setup in the previous step.
+
+```bash
+dtc -o configs/vms/aio-rk3588-jd4-vm1.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4-vm1.dts
+dtc -o configs/vms/aio-rk3588-jd4-vm2.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4-vm2.dts
 ```
 
 ## Prepare Linux kernel bianry
@@ -48,8 +73,8 @@ cd crates/arceos && git checkout rk3588_jd4
 * compile
 
 ```bash
-make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml defconfig
-make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml VM_CONFIGS=configs/vms/linux-rk3588-aarch64-smp.toml LOG=debug GICV3=y upload
+make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml SMP=2 defconfig
+make ARCH=aarch64 PLATFORM=configs/platforms/aarch64-rk3588j-hv.toml VM_CONFIGS=configs/vms/linux-rk3588-aarch64-smp-vm1.toml:configs/vms/linux-rk3588-aarch64-smp-vm2.toml LOG=debug GICV3=y upload
 ```
 
 * copy to tftp dir (make xxx upload will copy the image to `/srv/tftp/axvisor` automatically)
@@ -70,4 +95,11 @@ setenv ipaddr 192.168.50.8
 # 使用 tftp 加载镜像到指定内存地址并 boot
 setenv serverip 192.168.50.97;setenv ipaddr 192.168.50.8;tftp 0x00480000 ${serverip}:axvisor;tftp 0x10000000 ${serverip}:rk3588_dtb.bin;bootm 0x00480000 - 0x10000000;
 ```
-tftp 0x00480000 ${serverip}:Image.bin;tftp 0x10000000 ${serverip}:rk3588_dtb.bin;bootm 0x00480000 - 0x10000000;
+
+The VM2 will wait for several seconds before boot to allow VM1 to setup clocks of the whole SoC first.
+
+The VM1 output goes to the RS232 on the board (ttyS1 in Linux and serial@feb40000 in the device tree), and the VM2 output goes to the USB Type-C (ttyS2/ttyFIQ0 in Linux and serial@feb5000 in the device tree).
+
+## Known Issues
+
+- Resets of the ethernet in VM2 is not working, and reconfigure the NIC (e.g. with NetworkManager) may cause the VM2 to hang. Currently the initramfs will attempt to autoconfig the eth port then mount NFS as the rootfs. You may override the configuration with `ip=` kernel bootarg.
