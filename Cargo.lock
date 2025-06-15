@@ -149,6 +149,14 @@ dependencies = [
 [[package]]
 name = "arm_gicv2"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/arm_gicv2.git?branch=debin%2F2vm_timer#0ad077649e030b9836a5dc55a5a01b1fd0246e11"
+dependencies = [
+ "tock-registers 0.8.1",
+]
+
+[[package]]
+name = "arm_gicv2"
+version = "0.1.0"
 source = "git+https://github.com/arceos-hypervisor/arm_gicv2#eee14941d490719f6689e82f9a87caea6767bdc3"
 dependencies = [
  "tock-registers 0.8.1",
@@ -169,12 +177,31 @@ version = "0.1.0"
 dependencies = [
  "aarch64-cpu 9.4.0",
  "aarch64_sysreg",
+ "arm_vgic",
  "axaddrspace",
+ "axdevice_base",
  "axerrno",
  "axvcpu",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
  "log",
  "numeric-enum-macro",
  "percpu",
+ "spin",
+ "tock-registers 0.8.1",
+]
+
+[[package]]
+name = "arm_vgic"
+version = "0.0.0"
+dependencies = [
+ "arm_gicv2 0.1.0 (git+https://github.com/arceos-hypervisor/arm_gicv2.git?branch=debin%2F2vm_timer)",
+ "axaddrspace",
+ "axdevice_base",
+ "axerrno",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
+ "bitmaps",
+ "log",
+ "memory_addr",
  "spin",
  "tock-registers 0.8.1",
 ]
@@ -255,6 +282,7 @@ dependencies = [
 name = "axdevice"
 version = "0.1.0"
 dependencies = [
+ "arm_vgic",
  "axaddrspace",
  "axdevice_base",
  "axerrno",
@@ -407,7 +435,7 @@ version = "0.1.0"
 dependencies = [
  "aarch64-cpu 10.0.0",
  "arm-gic-driver",
- "arm_gicv2",
+ "arm_gicv2 0.1.0 (git+https://github.com/arceos-hypervisor/arm_gicv2)",
  "arm_pl011",
  "axalloc",
  "axconfig 0.1.0",
@@ -445,7 +473,6 @@ name = "axhvc"
 version = "0.1.0"
 dependencies = [
  "axerrno",
- "bit_field",
  "numeric-enum-macro",
 ]
 
@@ -589,16 +616,61 @@ dependencies = [
 ]
 
 [[package]]
+name = "axvisor_api"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#a40fbf91fe582edae2b1fea274c52aab8804f97d"
+dependencies = [
+ "axaddrspace",
+ "axvisor_api_proc 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
+ "crate_interface",
+ "memory_addr",
+]
+
+[[package]]
+name = "axvisor_api"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#ebb860c795a4d2e828b8595dca5ad9dff84e4883"
+dependencies = [
+ "axvisor_api_proc 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git)",
+ "crate_interface",
+ "memory_addr",
+]
+
+[[package]]
+name = "axvisor_api_proc"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt#a40fbf91fe582edae2b1fea274c52aab8804f97d"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+]
+
+[[package]]
+name = "axvisor_api_proc"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#ebb860c795a4d2e828b8595dca5ad9dff84e4883"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+]
+
+[[package]]
 name = "axvm"
 version = "0.1.0"
 dependencies = [
  "arm_vcpu",
  "axaddrspace",
  "axdevice",
+ "axdevice_base",
  "axerrno",
  "axvcpu",
  "axvmconfig",
  "cfg-if",
+ "cpumask",
  "log",
  "memory_addr",
  "page_table_entry",
@@ -613,6 +685,7 @@ dependencies = [
 name = "axvmconfig"
 version = "0.1.0"
 dependencies = [
+ "axdevice_base",
  "axerrno",
  "log",
  "serde",
@@ -1153,6 +1226,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro-crate"
+version = "3.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "edce586971a4dfaa28950c6f18ed55e0406c1ab88bbce2c6f6293a7aaba73d35"
+dependencies = [
+ "toml_edit 0.22.24",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.94"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1297,11 +1379,12 @@ dependencies = [
 [[package]]
 name = "riscv_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git#4000ae3cd546423c20785d7d93f81a80233cc35a"
+source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git?branch=inject_interrupt_vgicv3_ivc#30c743b825778fd740c8e09988872e8a818ffe47"
 dependencies = [
  "axaddrspace",
  "axerrno",
  "axvcpu",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git)",
  "bit_field",
  "bitflags 2.9.0",
  "cfg-if",
@@ -1770,9 +1853,10 @@ dependencies = [
 [[package]]
 name = "x86_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/x86_vcpu.git#2cc42349f23c9a38723710a38d34b080255520e4"
+source = "git+https://github.com/arceos-hypervisor/x86_vcpu.git?branch=inject_interrupt#b240131f84db2ff61d114340c07049dcf20209b4"
 dependencies = [
  "axaddrspace",
+ "axdevice_base",
  "axerrno",
  "axvcpu",
  "bit_field",
@@ -1783,9 +1867,27 @@ dependencies = [
  "memory_addr",
  "numeric-enum-macro",
  "page_table_entry",
+ "paste",
  "raw-cpuid 11.5.0",
  "x86",
  "x86_64 0.15.2",
+ "x86_vlapic",
+]
+
+[[package]]
+name = "x86_vlapic"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/x86_vlapic.git?branch=timer#5ac0b3f1e76efe46b42fb825818e83e801e49ab2"
+dependencies = [
+ "axaddrspace",
+ "axdevice_base",
+ "axerrno",
+ "axvisor_api 0.1.0 (git+https://github.com/arceos-hypervisor/axvisor_api.git?branch=inject_interrupt)",
+ "bit",
+ "log",
+ "memory_addr",
+ "paste",
+ "tock-registers 0.9.0",
 ]
 
 [[package]]
@@ -1808,7 +1910,3 @@ dependencies = [
  "quote",
  "syn 2.0.100",
 ]
-
-[[patch.unused]]
-name = "arm_vgic"
-version = "0.0.0"
