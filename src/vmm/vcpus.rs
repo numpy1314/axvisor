@@ -426,8 +426,9 @@ fn vcpu_run() {
                 }
             },
             Err(err) => {
-                warn!("VM[{}] run VCpu[{}] get error {:?}", vm_id, vcpu_id, err);
-                wait(vm_id)
+                error!("VM[{}] run VCpu[{}] get error {:?}", vm_id, vcpu_id, err);
+                // wait(vm_id)
+                vm.shutdown().expect("VM shutdown failed");
             }
         }
 
