@@ -9427,7 +9427,7 @@
 
 	chosen {
 		linux,initrd-end = <0x00 0xaac8000>;
-		bootargs = "storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  storagenode=/mmc@fe2e0000 androidboot.verifiedbootstate=orange ro rootwait console=ttyS1,115200n8 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs rootfstype=ext4 overlayroot=device:dev=PARTLABEL=userdata,fstype=ext4,mkfs=1 coherent_pool=1m systemd.gpt_auto=0 cgroup_enable=memory swapaccount=1 net.ifnames=0 rcupdate.rcu_expedited=0 comm-05/28/2025 androidboot.fwver=ddr-v1.15-d5483af87d,spl-v1.13,bl31-v1.44,bl32-v1.15,uboot--boot clk_ignore_unused";
+		bootargs = "storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  storagenode=/mmc@fe2e0000 androidboot.verifiedbootstate=orange ro rootwait console=ttyS1,115200n8 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs rootfstype=ext4 overlayroot=device:dev=PARTLABEL=userdata,fstype=ext4,mkfs=1 coherent_pool=1m systemd.gpt_auto=0 cgroup_enable=memory swapaccount=1 net.ifnames=0 rcupdate.rcu_expedited=0 comm-05/28/2025 androidboot.fwver=ddr-v1.15-d5483af87d,spl-v1.13,bl31-v1.44,bl32-v1.15,uboot--boot clk_ignore_unused libata.force=1.00:disable";
 		linux,initrd-start = <0x00 0xa200000>;
 		phandle = <0x48d>;
 	};

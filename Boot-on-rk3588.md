@@ -19,7 +19,19 @@ cat testfile.txt
 
 You should see `TFTP Server Test` on your screen.
 
-## Setup an NFS Server for the rootfs of VM2
+## Setup rootfs for VM2
+
+### SATA disk
+
+Burn the rootfs image to an **M.2 SATA** SSD with whatever tools you prefer (e.g. dd, rufus, Balena Etcher, or even a loop mount and rsync), and install it to the back of the board. Specify the proper partition identifier (e.g. `/dev/sda1`) in the DTS bootargs.
+
+The kernel need built with SCSI disk, libata and AHCI platform support, or the corresponding kernel modules need to be put into the initramfs image. The default config in the Firefly SDK builds them as kernel modules but are not included in the initramfs image, hence the kernel failed to recognize the disk and mount the root partition.
+
+### NFS-root (optional)
+
+This works when directly attached storage is not available for VM2.
+
+Setup an NFS server:
 
 ```bash
 sudo apt install nfs-kernel-server
@@ -41,9 +53,9 @@ EOF
 sudo exportfs -ar
 ```
 
-## Compile device tree
+Before compiling the DTS, edit the bootargs in `aio-rk3588-jd4-vm2.dts` and specify an NFS root as `root=/dev/nfs nfsroot=<server_ip>:<root-dir>` where `<server_ip>:<root-dir>` is your own NFS server IP and rootfs export path setup in the previous step.
 
-Before compiling the DTS, edit the bootargs in `aio-rk3588-jd4-vm2.dts` and replace `<server_ip>:<root-dir>` with your own NFS server IP and rootfs export path setup in the previous step.
+## Compile device tree
 
 ```bash
 dtc -o configs/vms/aio-rk3588-jd4-vm1.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4-vm1.dts
@@ -102,5 +114,5 @@ The VM1 output goes to the RS232 on the board (ttyS1 in Linux and serial@feb4000
 
 ## Known Issues
 
-* Resets of the ethernet in VM2 is not working, and reconfigure the NIC (e.g. with NetworkManager) may cause the VM2 to hang. Currently the initramfs will attempt to autoconfig the eth port then mount NFS as the rootfs. You may override the configuration with `ip=` kernel bootarg.
+* Resets of the ethernet in VM2 is not working, and reconfigure the NIC (e.g. with NetworkManager) may cause the VM2 to hang. Currently the initramfs will attempt to autoconfig the eth port when NFS-root is used. You may override the configuration with `ip=` kernel bootarg.
 * Execute `reboot` in either VM would reset the whole board, which may be unexpected for the other VM. You may `shutdown` VM2 first, then do shutdown or reboot in VM1.

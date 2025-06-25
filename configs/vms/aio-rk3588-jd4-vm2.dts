@@ -11,8 +11,7 @@
 	chosen {
 		linux,initrd-start = <0x01 0x0a200000>;
 		linux,initrd-end = <0x01 0xaac8000>;
-		// **Replace <server_ip>:<root-dir> with your own NFS server IP and rootfs export path!**
-		bootargs = "rw earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=/dev/nfs nfsroot=<server_ip>:<root-dir>";
+		bootargs = "rw earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=/dev/sda1";
 		phandle = <0x48d>;
 	};
 
@@ -252,6 +251,70 @@
 			#clock-cells = <0>;
 			phandle = <0x143>;
 		};
+
+		sata0_aclk_396m {
+			clock-output-names = "sata0_aclk_396m";
+			compatible = "fixed-clock";
+			clock-frequency = <396000000>;
+			#clock-cells = <0>;
+			phandle = <0x171>;
+		};
+
+		sata0_pmalive_24m {
+			clock-output-names = "sata0_pmalive_24m";
+			compatible = "fixed-clock";
+			clock-frequency = <24000000>;
+			#clock-cells = <0>;
+			phandle = <0x16e>;
+		};
+
+		sata0_rxoob_50m {
+			clock-output-names = "sata0_rxoob_50m";
+			compatible = "fixed-clock";
+			clock-frequency = <50000000>;
+			#clock-cells = <0>;
+			phandle = <0x174>;
+		};
+
+		sata0_pipephy_ref_24m {
+			clock-output-names = "sata0_pipephy_ref_24m";
+			compatible = "fixed-clock";
+			clock-frequency = <24000000>;
+			#clock-cells = <0>;
+			phandle = <0x163>;
+		};
+
+		sata0_pipephy_asic_0 {
+			clock-output-names = "sata0_pipephy_asic_0";
+			compatible = "fixed-clock";
+			clock-frequency = <0>;
+			#clock-cells = <0>;
+			phandle = <0x17e>;
+		};
+
+		phy0_refclk_100m {
+			clock-output-names = "phy0_refclk_100m";
+			compatible = "fixed-clock";
+			clock-frequency = <100000000>;
+			#clock-cells = <0>;
+			phandle = <0x2bd>;
+		};
+
+		phy0_apbclk_100m {
+			clock-output-names = "phy0_apbclk_100m";
+			compatible = "fixed-clock";
+			clock-frequency = <100000000>;
+			#clock-cells = <0>;
+			phandle = <0x185>;
+		};
+
+		phy0_phpclk_150m {
+			clock-output-names = "phy0_phpclk_150m";
+			compatible = "fixed-clock";
+			clock-frequency = <150000000>;
+			#clock-cells = <0>;
+			phandle = <0x166>;
+		};
 	};
 
 	serial@feb50000 {
@@ -295,6 +358,39 @@
 		phandle = <0xc8>;
 	};
 
+	syscon@fd5bc000 {
+		compatible = "rockchip,pipe-phy-grf\0syscon";
+		reg = <0x00 0xfd5bc000 0x00 0x100>;
+		phandle = <0x194>;
+	};
+
+	sata@fe210000 {
+		phy-names = "sata-phy";
+		clock-names = "sata\0pmalive\0rxoob\0ref\0asic";
+		interrupts = <0x00 0x111 0x04>;
+		clocks = <0x171 0x16e 0x174 0x163 0x17e>;
+		compatible = "rockchip,rk-ahci\0snps,dwc-ahci";
+		status = "okay";
+		interrupt-names = "hostc";
+		phys = <0x108 0x01>;
+		reg = <0x00 0xfe210000 0x00 0x1000>;
+		phandle = <0x290>;
+		ports-implemented = <0x01>;
+	};
+
+	phy@fee00000 {
+		rockchip,pipe-grf = <0x76>;
+		clock-names = "refclk\0apbclk\0phpclk";
+		clocks = <0x2bd 0x185 0x166>;
+		#phy-cells = <0x01>;
+		compatible = "rockchip,rk3588-naneng-combphy";
+		status = "okay";
+		rockchip,pipe-phy-grf = <0x194>;
+		reg = <0x00 0xfee00000 0x00 0x100>;
+		phandle = <0x108>;
+		// resets = <0x02 0x20005 0x02 0x4d6>;
+		// reset-names = "combphy-apb\0combphy";
+	};
 
 	ethernet@fe1c0000 {
 		power-domains = <0x60 0x21>;
@@ -399,6 +495,10 @@
 		gmac1_mtl_tx_setup = "/ethernet@fe1c0000/tx-queues-config";
 		gmac1_stmmac_axi_setup = "/ethernet@fe1c0000/stmmac-axi-config";
 
+		sata0 = "/sata@fe210000";
+		sata0m0_pins = "/pinctrl/sata0/sata0m0-pins";
+		sata0m1_pins = "/pinctrl/sata0/sata0m1-pins";
+
 	};
 
 	syscon@fd5f0000 {
@@ -493,6 +593,32 @@
 			gmac1-miim {
 				rockchip,pins = <0x03 0x12 0x01 0x198 0x03 0x13 0x01 0x198>;
 				phandle = <0x10e>;
+			};
+		};
+
+		sata {
+
+			sata-reset {
+				rockchip,pins = <0x04 0x11 0x00 0x198>;
+				phandle = <0x3e7>;
+			};
+
+			sata-pins {
+				rockchip,pins = <0x00 0x16 0x0d 0x198 0x00 0x1c 0x0d 0x198 0x00 0x1d 0x0d 0x198>;
+				phandle = <0x3e6>;
+			};
+		};
+
+		sata0 {
+
+			sata0m1-pins {
+				rockchip,pins = <0x01 0x0b 0x06 0x198>;
+				phandle = <0x3e9>;
+			};
+
+			sata0m0-pins {
+				rockchip,pins = <0x04 0x0e 0x06 0x198>;
+				phandle = <0x3e8>;
 			};
 		};
 
