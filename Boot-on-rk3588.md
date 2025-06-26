@@ -64,7 +64,7 @@ dtc -o configs/vms/aio-rk3588-jd4-vm2.dtb -O dtb -I dts configs/vms/aio-rk3588-j
 
 ## Prepare Linux kernel binary
 
-Prepare RK3588 SDK following manufacturer's instruction, checkout the Linux kernel repository to this branch: https://github.com/arceos-hypervisor/firefly-linux-bsp/tree/axvisor-wip, then build the kernel.
+Prepare RK3588 SDK following manufacturer's instruction, checkout the Linux kernel repository to this branch: https://github.com/arceos-hypervisor/firefly-linux-bsp/tree/axvisor-rk3588-jd4-rt89, then build the kernel. This branch has PREEMPT_RT patches and native SCS, SATA and AHCI support, bootable on both VMs.
 
 Copy the kernel and ramdisk image to AxVisor directory:
 
