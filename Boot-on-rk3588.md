@@ -62,7 +62,7 @@ dtc -o configs/vms/aio-rk3588-jd4-vm1.dtb -O dtb -I dts configs/vms/aio-rk3588-j
 dtc -o configs/vms/aio-rk3588-jd4-vm2.dtb -O dtb -I dts configs/vms/aio-rk3588-jd4-vm2.dts
 ```
 
-## Prepare Linux kernel bianry
+## Prepare Linux kernel binary
 
 Prepare RK3588 SDK following manufacturer's instruction, checkout the Linux kernel repository to this branch: https://github.com/arceos-hypervisor/firefly-linux-bsp/tree/axvisor-wip, then build the kernel.
 
