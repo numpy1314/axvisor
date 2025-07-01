@@ -187,7 +187,6 @@ dependencies = [
 [[package]]
 name = "arm_vgic"
 version = "0.0.0"
-source = "git+https://github.com/arceos-hypervisor/arm_vgic.git?branch=vmm_irq_gicv3#453e7b070573abefeb2ef1658234285591ad4b1d"
 dependencies = [
  "arm_gicv2",
  "axaddrspace",
@@ -505,9 +504,8 @@ dependencies = [
 [[package]]
 name = "axipi"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm_irq_gicv3#00480405fc3e89f40d6d4263054687ba5918c873"
 dependencies = [
- "axconfig 0.1.0 (git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm_irq_gicv3)",
+ "axconfig 0.1.0",
  "axhal",
  "kspin",
  "lazyinit",

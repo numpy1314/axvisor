@@ -34,6 +34,7 @@ kernel-aspace-size = "0x0000_ffff_ffff_f000"
 mmio-regions = [
     [0xfeb50000, 0x1000], # uart8250 UART0
     [0xfe600000, 0x10000], # gic-v3 gicd
+    [0xfe640000, 0x40000], # gic-v3 gits
     [0xfe680000, 0x100000], # gic-v3 gicr
     [0xa41000000, 0x400000],
     [0xa40c00000, 0x400000],

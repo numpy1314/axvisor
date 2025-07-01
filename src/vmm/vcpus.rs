@@ -4,6 +4,7 @@ use core::sync::atomic::{AtomicUsize, Ordering};
 use std::os::arceos::{api::{self, task::{ax_wait_queue_wake, AxCpuMask}}, modules::{axhal, axtask}};
 
 use axaddrspace::GuestPhysAddr;
+use axstd::sync::atomic::{AtomicUsize, Ordering};
 use axtask::{AxTaskRef, TaskExtRef, TaskInner, WaitQueue};
 use axvcpu::{AxVCpuExitReason, VCpuState};
 
@@ -294,6 +295,11 @@ fn vcpu_run() {
     let vcpu = curr.task_ext().vcpu.clone();
     let vm_id = vm.id();
     let vcpu_id = vcpu.id();
+
+    // boot delay
+    let boot_delay_sec = (vm_id - 1) * 5;
+    info!("VM[{}] boot delay: {}s", vm_id, boot_delay_sec);
+    busy_wait(Duration::from_secs(boot_delay_sec as _));
 
     info!("VM[{}] VCpu[{}] waiting for running", vm.id(), vcpu.id());
     wait_for(vm_id, || vm.running());

@@ -55,7 +55,7 @@ passthrough_devices = [
     ["pl011@9040000", 0x904_0000, 0x904_0000, 0x1000, 0x1],
     ["pl031@9010000", 0x901_0000, 0x901_0000, 0x1000, 0x1],
     ["pl061@9030000", 0x903_0000, 0x903_0000, 0x1000, 0x1],
-    # a003000.virtio_mmio virtio_mmio@a003000 
+    # a003000.virtio_mmio virtio_mmio@a003000
     # a003200.virtio_mmio virtio_mmio@a003200
     ["virtio_mmio", 0xa00_0000, 0xa00_0000, 0x4000, 0x1],
 ]
