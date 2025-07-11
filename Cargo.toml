@@ -28,6 +28,8 @@ axstd = {git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm-
   "irq",
   "multitask",
   "driver-dyn",
+  "smp",
+  "page-alloc-64g",
 ]}
 
 # System dependent modules provided by ArceOS-Hypervisor.
@@ -43,12 +45,11 @@ page_table_entry = {version = "0.5", features = ["arm-el2"]}
 page_table_multiarch = "0.5"
 percpu = {version = "0.2", features = ["arm-el2"]}
 
-axplat-aarch64-dyn = {git = "https://github.com/arceos-hypervisor/axplat-aarch64-dyn", features = ["irq", "smp", "hv"]}
+axplat-aarch64-dyn = {git = "https://github.com/arceos-hypervisor/axplat-aarch64-dyn", branch = "vmm", features = ["irq", "smp", "hv"]}
 
 [build-dependencies]
-axconfig = {git = "https://github.com/arceos-hypervisor/arceos.git", branch = "dev-dyn-driver"}
+axconfig = {git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm-dev"}
 prettyplease = "0.2"
 quote = "1.0"
 syn = "2.0"
 toml = {git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std"}
-

@@ -292,7 +292,7 @@ dependencies = [
 [[package]]
 name = "axconfig"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=dev-dyn-driver#40fbaa105b563c063027246af25068599759f5ec"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#4a1942115d6b81c7fb8655a4d95df82e6325ca3f"
 dependencies = [
  "axconfig-macros",
 ]
@@ -440,6 +440,7 @@ dependencies = [
  "axruntime",
  "axsync",
  "axtask",
+ "kspin",
 ]
 
 [[package]]
@@ -504,7 +505,7 @@ dependencies = [
  "axconfig 0.1.0",
  "axcpu",
  "axlog",
- "axplat",
+ "axplat 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm)",
  "axplat-aarch64-qemu-virt",
  "axplat-loongarch64-qemu-virt",
  "axplat-riscv64-qemu-virt",
@@ -568,7 +569,21 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c86cdb48cf1fbd432f4326ab0852b696ac49442b0ea0aed3401cb0bbe370a19f"
 dependencies = [
- "axplat-macros",
+ "axplat-macros 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bitflags 2.9.1",
+ "const-str",
+ "crate_interface",
+ "handler_table",
+ "kspin",
+ "memory_addr 0.4.0",
+]
+
+[[package]]
+name = "axplat"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm#e4c656f899b0013f3759a272144dbcd73ec5b251"
+dependencies = [
+ "axplat-macros 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm)",
  "bitflags 2.9.1",
  "const-str",
  "crate_interface",
@@ -580,14 +595,14 @@ dependencies = [
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn#141aa634467891026949f93985a70c36248ac6ea"
+source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#7060b94fd2f3d06d2ed3240a6fa3bcee66baa134"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
  "any-uart",
  "axconfig-macros",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm)",
  "fdt-parser",
  "heapless",
  "lazyinit",
@@ -614,7 +629,7 @@ dependencies = [
  "arm_pl011",
  "arm_pl031",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "int_ratio",
  "kspin",
  "lazyinit",
@@ -630,7 +645,7 @@ checksum = "6d5d75b950e70a6548b8537aecded7ccafdd3ec639057c4c7c7d6d05b09d0e4d"
 dependencies = [
  "axconfig-macros",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axplat-aarch64-peripherals",
  "log",
  "page_table_entry",
@@ -644,7 +659,7 @@ checksum = "edb82011898513ca97dce6861b68a97eb56608ddb974a727cd761083c2bd8836"
 dependencies = [
  "axconfig-macros",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "kspin",
  "lazyinit",
  "log",
@@ -665,6 +680,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "axplat-macros"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm#e4c656f899b0013f3759a272144dbcd73ec5b251"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.104",
+]
+
+[[package]]
 name = "axplat-riscv64-qemu-virt"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -672,7 +697,7 @@ checksum = "40f16634061d2efb7a0ee5fd9ec339d75547b3a967d238b9ba5711c5c6f01c5a"
 dependencies = [
  "axconfig-macros",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log",
  "riscv 0.14.0",
  "sbi-rt",
@@ -686,7 +711,7 @@ checksum = "05b1b3bee47e2965347b943c86adb1a65555d90e4d5e6271fe99489957520590"
 dependencies = [
  "axconfig-macros",
  "axcpu",
- "axplat",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags 2.9.1",
  "heapless",
  "int_ratio",
@@ -714,7 +739,7 @@ dependencies = [
  "axhal",
  "axlog",
  "axmm",
- "axplat",
+ "axplat 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates?branch=vmm)",
  "axtask",
  "chrono",
  "crate_interface",
@@ -777,7 +802,7 @@ name = "axvisor"
 version = "0.1.0"
 dependencies = [
  "axaddrspace",
- "axconfig 0.1.0 (git+https://github.com/arceos-hypervisor/arceos.git?branch=dev-dyn-driver)",
+ "axconfig 0.1.0 (git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev)",
  "axerrno",
  "axplat-aarch64-dyn",
  "axstd",
@@ -2755,7 +2780,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -3188,7 +3213,7 @@ dependencies = [
  "getrandom 0.3.3",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]

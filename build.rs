@@ -216,7 +216,7 @@ fn main() -> io::Result<()> {
     let arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
     let platform = env::var("AX_PLATFORM").unwrap_or("".to_string());
-    println!("cargo:rustc-cfg=platform=\"{}\"", platform);
+    println!("cargo:rustc-cfg=platform=\"{platform}\"");
 
     if platform != "dummy" {
         gen_linker_script(&arch, platform.as_str()).unwrap();
@@ -254,7 +254,7 @@ fn main() -> io::Result<()> {
             generate_guest_img_loading_functions(&mut output_file, config_files)?;
         }
         Err(error) => {
-            writeln!(output_file, "    compile_error!(\"{}\")", error)?;
+            writeln!(output_file, "    compile_error!(\"{error}\")")?;
             writeln!(output_file, "}}\n")?;
         }
     }

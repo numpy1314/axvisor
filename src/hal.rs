@@ -69,14 +69,12 @@ impl AxVCpuHal for AxVCpuHalImpl {
 
     #[cfg(target_arch = "aarch64")]
     fn irq_fetch() -> usize {
-        // axhal::irq::fetch_irq()
-        0
+        axhal::irq::irq_fetch()
     }
 
     #[cfg(target_arch = "aarch64")]
     fn irq_hanlder() {
-        // let irq_num = axhal::irq::fetch_irq();
-        let irq_num = 0;
+        let irq_num = axhal::irq::irq_fetch();
         debug!("IRQ handler {irq_num}");
         axhal::irq::irq_handler(irq_num);
     }
