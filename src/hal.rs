@@ -69,14 +69,16 @@ impl AxVCpuHal for AxVCpuHalImpl {
 
     #[cfg(target_arch = "aarch64")]
     fn irq_fetch() -> usize {
-        axhal::irq::fetch_irq()
+        // axhal::irq::fetch_irq()
+        0
     }
 
     #[cfg(target_arch = "aarch64")]
     fn irq_hanlder() {
-        let irq_num = axhal::irq::fetch_irq();
+        // let irq_num = axhal::irq::fetch_irq();
+        let irq_num = 0;
         debug!("IRQ handler {irq_num}");
-        axhal::irq::handler_irq(irq_num);
+        axhal::irq::irq_handler(irq_num);
     }
 }
 
@@ -95,7 +97,7 @@ pub(crate) fn enable_virtualization() {
 
     static CORES: AtomicUsize = AtomicUsize::new(0);
 
-    for cpu_id in 0..config::SMP {
+    for cpu_id in 0..config::plat::CPU_NUM {
         thread::spawn(move || {
             // Initialize cpu affinity here.
             assert!(
@@ -120,7 +122,7 @@ pub(crate) fn enable_virtualization() {
     }
 
     // Wait for all cores to enable virtualization.
-    while CORES.load(Ordering::Acquire) != config::SMP {
+    while CORES.load(Ordering::Acquire) != config::plat::CPU_NUM {
         // Use `yield_now` instead of `core::hint::spin_loop` to avoid deadlock.
         thread::yield_now();
     }

@@ -1,6 +1,9 @@
 use alloc::{collections::BTreeMap, vec::Vec};
 
-use core::sync::atomic::{AtomicUsize, Ordering};
+use core::{
+    cell::UnsafeCell,
+    sync::atomic::{AtomicUsize, Ordering},
+};
 use std::os::arceos::{
     api::task::{AxCpuMask, ax_wait_queue_wake},
     modules::axtask,
@@ -20,7 +23,32 @@ const KERNEL_STACK_SIZE: usize = 0x40000; // 256 KiB
 ///
 /// TODO: find a better data structure to replace the `static mut`, something like a conditional
 /// variable.
-static mut VM_VCPU_TASK_WAIT_QUEUE: BTreeMap<usize, VMVCpus> = BTreeMap::new();
+static VM_VCPU_TASK_WAIT_QUEUE: Queue = Queue::new();
+
+struct Queue(UnsafeCell<BTreeMap<usize, VMVCpus>>);
+
+unsafe impl Sync for Queue {}
+unsafe impl Send for Queue {}
+
+impl Queue {
+    const fn new() -> Self {
+        Self(UnsafeCell::new(BTreeMap::new()))
+    }
+
+    fn get(&self, vm_id: &usize) -> Option<&VMVCpus> {
+        unsafe { (*self.0.get()).get(vm_id) }
+    }
+
+    fn get_mut(&self, vm_id: &usize) -> Option<&mut VMVCpus> {
+        unsafe { (*self.0.get()).get_mut(vm_id) }
+    }
+
+    fn insert(&self, vm_id: usize, vcpus: VMVCpus) {
+        unsafe {
+            (*self.0.get()).insert(vm_id, vcpus);
+        }
+    }
+}
 
 /// A structure representing the VCpus of a specific VM, including a wait queue
 /// and a list of tasks associated with the VCpus.
