@@ -8,6 +8,8 @@ extern crate alloc;
 
 extern crate axstd as std;
 
+extern crate axplat_aarch64_dyn;
+
 mod hal;
 mod logo;
 mod task;

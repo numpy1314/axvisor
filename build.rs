@@ -262,7 +262,7 @@ fn main() -> io::Result<()> {
 }
 
 fn gen_linker_script(arch: &str, platform: &str) -> io::Result<()> {
-    let fname = format!("linker_{}.lds", platform);
+    let fname = format!("linker_{platform}.lds");
     let output_arch = if arch == "x86_64" {
         "i386:x86-64"
     } else if arch.contains("riscv") {
@@ -276,7 +276,7 @@ fn gen_linker_script(arch: &str, platform: &str) -> io::Result<()> {
         "%KERNEL_BASE%",
         &format!("{:#x}", axconfig::plat::KERNEL_BASE_VADDR),
     );
-    let ld_content = ld_content.replace("%SMP%", &format!("{}", axconfig::SMP));
+    let ld_content = ld_content.replace("%SMP%", &format!("{}", axconfig::plat::CPU_NUM));
 
     // target/<target_triple>/<mode>/build/axvisor-xxxx/out
     let out_dir = std::env::var("OUT_DIR").unwrap();

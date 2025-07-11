@@ -2,6 +2,8 @@
 /target
 /.vscode
 /tmp
+/.arceos
+/.cargo
 .DS_Store
 *.asm
 *.img
@@ -13,6 +15,7 @@
 actual.out
 qemu.log
 rusty-tags.vi
+
 
 /**/.axconfig.*
 
