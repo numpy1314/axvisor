@@ -20,7 +20,7 @@ phys_cpu_sets = [1]
 entry_point = 0x9020_0000
 # The location of image: "memory" | "fs".
 # Load from file system.
-image_location = "memory"
+image_location = "fs"
 # The file path of the kernel image.
 kernel_path = "nimbos-riscv64.bin"
 # The load address of the kernel image.
