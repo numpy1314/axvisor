@@ -62,8 +62,12 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
             vm_cfg.add_memory_region(VmMemConfig {
                 gpa: region.address as usize,
                 size: region.size as usize,
-                flags: (MappingFlags::READ | MappingFlags::WRITE | MappingFlags::EXECUTE).bits(),
-                map_type: VmMemMappingType::MapIentical,
+                flags: (MappingFlags::READ
+                    | MappingFlags::WRITE
+                    | MappingFlags::EXECUTE
+                    | MappingFlags::USER)
+                    .bits(),
+                map_type: VmMemMappingType::MapIdentical,
             });
         }
     }
@@ -95,7 +99,10 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
         // Skip the interrupt controller, as we will use vGIC
         // TODO: filter with compatible property and parse its phandle from DT; maybe needs a second pass?
         const GIC_PHANDLE: usize = 1;
-        if name.starts_with("interrupt-controller") {
+        if name.starts_with("interrupt-controller")
+            || name.starts_with("intc")
+            || name.starts_with("its")
+        {
             info!("skipping node {} to use vGIC", name);
             continue;
         }
@@ -226,29 +233,7 @@ pub fn init_guest_vms() {
         info!("Creating VM[{}] {:?}", vm_config.id(), vm_config.name());
 
         // Create VM.
-        // let vm = VM::new(vm_config).expect("Failed to create VM");
-        // %%% temp action!
-        let vm = VM::temp_new_with_device_adder(vm_config, |devices| {
-            let mock_timer = super::mock::MockTimer::new();
-            let mock_timer = alloc::sync::Arc::new(mock_timer);
-
-            // devices.add_mmio_dev(mock_timer.clone());
-
-            // use std::os::arceos::modules::axhal;
-
-            // fn schedule_next(action: impl Fn() + Send + Sync + 'static) {
-            //     super::timer::register_timer(axhal::time::monotonic_time_nanos() + 1_000_000_000, move |time| {
-            //         info!("Timer fired at {:?}", time);
-            //         action();
-            //         schedule_next(action);
-            //     });
-            // }
-
-            // schedule_next(move || {
-            //     mock_timer.tick();
-            // });
-        })
-        .expect("Failed to create VM");
+        let vm = VM::new(vm_config).expect("Failed to create VM");
         push_vm(vm.clone());
 
         // Load corresponding images for VM.

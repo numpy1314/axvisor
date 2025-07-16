@@ -91,8 +91,7 @@ pci-ranges = [
     [0x80_0000_0000, 0x80_0000_0000],   # 64-bit MMIO space
 ]                               # [(uint, uint)]
 # UART Address
-uart-paddr = 0x0904_0000        # uint
-# uart-paddr = 0x0900_0000        # uint
+uart-paddr = 0x0900_0000        # uint
 # UART IRQ number
 uart-irq = 1                    # uint
 
@@ -102,6 +101,9 @@ gicc-paddr = 0x0801_0000        # uint
 gicd-paddr = 0x0800_0000        # uint
 gicv-paddr = 0x0804_0000        # uint
 gich-paddr = 0x0803_0000        # uint
+
+# GIC Redistributor base address
+gicr-paddr = 0x080a_0000
 
 # PSCI
 psci-method = "smc"             # str

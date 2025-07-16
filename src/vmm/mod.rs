@@ -1,15 +1,20 @@
 mod config;
 mod hvc;
 mod images;
+mod ivc;
 mod mock;
 pub mod timer;
-mod ivc;
 mod vcpus;
 mod vm_list;
 
-
 use core::sync::atomic::{AtomicUsize, Ordering};
-use std::os::arceos::{api::task::{self, AxWaitQueueHandle}, modules::{axhal, axtask::{self, TaskExtRef}}};
+use std::os::arceos::{
+    api::task::{self, AxWaitQueueHandle},
+    modules::{
+        axhal,
+        axtask::{self, TaskExtRef},
+    },
+};
 
 use axerrno::{AxResult, ax_err_type};
 

@@ -139,7 +139,10 @@ pub(crate) fn enable_virtualization() {
                 "Initialize CPU affinity failed!"
             );
 
-            info!("Enabling hardware virtualization support on core {}", cpu_id);
+            info!(
+                "Enabling hardware virtualization support on core {}",
+                cpu_id
+            );
 
             vmm::init_timer_percpu();
 
@@ -276,22 +279,20 @@ mod arch_api_impl {
         // use axstd::os::arceos::modules::axhal::irq::MyVgic;
         // MyVgic::get_gicd().lock().get_typer()
 
-        use std::os::arceos::modules::{axconfig, axhal};
         use memory_addr::pa;
+        use std::os::arceos::modules::{axconfig, axhal};
 
         let typer_phys_addr = axconfig::devices::GICD_PADDR + 0x4;
         let typer_virt_addr = axhal::mem::phys_to_virt(pa!(typer_phys_addr));
 
-        unsafe {
-            core::ptr::read_volatile(typer_virt_addr.as_ptr_of::<u32>())
-        }
+        unsafe { core::ptr::read_volatile(typer_virt_addr.as_ptr_of::<u32>()) }
     }
 
     #[cfg(target_arch = "aarch64")]
     extern fn read_vgicd_iidr() -> u32 {
         // use axstd::os::arceos::modules::axhal::irq::MyVgic;
         // MyVgic::get_gicd().lock().get_iidr()
-0
+        0
     }
 
     #[cfg(target_arch = "aarch64")]

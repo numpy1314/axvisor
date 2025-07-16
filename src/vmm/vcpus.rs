@@ -1,10 +1,21 @@
 use alloc::{collections::BTreeMap, vec::Vec};
 
-use core::sync::atomic::{AtomicUsize, Ordering};
-use std::os::arceos::{api::{self, task::{ax_wait_queue_wake, AxCpuMask}}, modules::{axhal, axtask}};
+use core::{
+    sync::atomic::{AtomicUsize, Ordering},
+    time::Duration,
+};
+use std::os::arceos::{
+    api::{
+        self,
+        task::{AxCpuMask, ax_wait_queue_wake},
+    },
+    modules::{
+        axhal::{self, time::busy_wait},
+        axtask,
+    },
+};
 
 use axaddrspace::GuestPhysAddr;
-use axstd::sync::atomic::{AtomicUsize, Ordering};
 use axtask::{AxTaskRef, TaskExtRef, TaskInner, WaitQueue};
 use axvcpu::{AxVCpuExitReason, VCpuState};
 
@@ -393,9 +404,17 @@ fn vcpu_run() {
                     warn!("VM[{}] run VCpu[{}] SystemDown", vm_id, vcpu_id);
                     vm.shutdown().expect("VM shutdown failed");
                 }
-                AxVCpuExitReason::SendIPI { target_cpu, target_cpu_aux, send_to_all, send_to_self, vector } => {
+                AxVCpuExitReason::SendIPI {
+                    target_cpu,
+                    target_cpu_aux,
+                    send_to_all,
+                    send_to_self,
+                    vector,
+                } => {
                     if send_to_all || send_to_self {
-                        unimplemented!("SendIPI with send_to_all or send_to_self is not implemented yet");
+                        unimplemented!(
+                            "SendIPI with send_to_all or send_to_self is not implemented yet"
+                        );
                     }
 
                     #[cfg(target_arch = "aarch64")]
@@ -405,13 +424,12 @@ fn vcpu_run() {
                         let aff1 = (target_cpu >> 8) & 0xff;
                         let irm = (send_to_all as u64);
 
-                        let icc_sgi1r_value = 
-                            (vector as u64) << 24 |
-                            aff3 << 48 |
-                            aff2 << 32 |
-                            aff1 << 16 |
-                            irm << 40 |
-                            target_cpu_aux;
+                        let icc_sgi1r_value = (vector as u64) << 24
+                            | aff3 << 48
+                            | aff2 << 32
+                            | aff1 << 16
+                            | irm << 40
+                            | target_cpu_aux;
 
                         debug!(
                             "VM[{}] run VCpu[{}] SendIPI, target_cpu={:#x}, target_cpu_aux={:#x}, vector={}, icc_sgi1r_value={:#x}",
@@ -427,8 +445,11 @@ fn vcpu_run() {
                         }
                     }
                 }
-                _ => {
-                    warn!("Unhandled VM-Exit");
+                e => {
+                    warn!(
+                        "VM[{}] run VCpu[{}] unhandled vmexit: {:?}",
+                        vm_id, vcpu_id, e
+                    );
                 }
             },
             Err(err) => {

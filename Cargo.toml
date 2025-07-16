@@ -24,7 +24,7 @@ lazyinit = "0.2"
 timer_list = "0.1.0"
 
 # System dependent modules provided by ArceOS.
-axstd = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm_irq_gicv3", features = [
+axstd = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm_inject_interrupt", features = [
     "alloc",
     "paging",
     # "fs",
@@ -38,8 +38,8 @@ axstd = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm
 ] }
 
 # System dependent modules provided by ArceOS-Hypervisor.
-axvm = { git = "https://github.com/arceos-hypervisor/axvm.git", branch = "inject_interrupt_vgicv3_ivc" }
-axvcpu = { git = "https://github.com/arceos-hypervisor/axvcpu.git", branch = "inject_interrupt_vgicv3_ivc" }
+axvm = { git = "https://github.com/arceos-hypervisor/axvm.git" }
+axvcpu = { git = "https://github.com/arceos-hypervisor/axvcpu.git" }
 axaddrspace = { git = "https://github.com/arceos-hypervisor/axaddrspace.git" }
 axhvc = { git = "https://github.com/arceos-hypervisor/axhvc.git" }
 
@@ -48,20 +48,20 @@ crate_interface = "0.1"
 axerrno = "0.1.0"
 cpumask = "0.1.0"
 kernel_guard = "0.1"
-memory_addr = "0.3"
+memory_addr = "0.4"
 page_table_entry = { version = "0.5", features = ["arm-el2"] }
 page_table_multiarch = "0.5"
 percpu = { version = "0.2", features = ["arm-el2"] }
 
-axdevice = { git = "https://github.com/arceos-hypervisor/axdevice.git", branch = "inject_interrupt_vgicv3" }
-axdevice_base = { git = "https://github.com/arceos-hypervisor/axdevice_crates.git", branch = "inject_interrupt" }
-axvisor_api = { git = "https://github.com/arceos-hypervisor/axvisor_api.git", branch = "inject_interrupt" }
+axdevice = { git = "https://github.com/arceos-hypervisor/axdevice.git" }
+axdevice_base = { git = "https://github.com/arceos-hypervisor/axdevice_crates.git" }
+axvisor_api = { git = "https://github.com/arceos-hypervisor/axvisor_api.git" }
 
 fdt-parser = "0.4"
 
 [build-dependencies]
 toml = { git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std" }
-axconfig = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "debin/timer_api" }
+axconfig = { git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm_inject_interrupt" }
 prettyplease = "0.2"
 quote = "1.0"
 syn = "2.0"

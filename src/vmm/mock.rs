@@ -14,7 +14,7 @@ pub struct MockTimer {
 
 impl BaseDeviceOps<GuestPhysAddrRange> for MockTimer {
     fn emu_type(&self) -> axdevice_base::EmuDeviceType {
-        axdevice_base::EmuDeviceType::EmuDeviceTConsole // just a placeholder
+        axdevice_base::EmuDeviceType::Dummy // just a placeholder
     }
 
     fn address_range(&self) -> GuestPhysAddrRange {
