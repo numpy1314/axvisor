@@ -213,13 +213,32 @@ name = "arm_vcpu"
 version = "0.1.0"
 dependencies = [
  "aarch64-cpu",
- "aarch64_sysreg",
  "axaddrspace",
+ "axdevice_base",
  "axerrno",
  "axvcpu",
+ "axvisor_api",
  "log",
  "numeric-enum-macro",
  "percpu",
+ "spin 0.10.0",
+ "tock-registers 0.9.0",
+]
+
+[[package]]
+name = "arm_vgic"
+version = "0.0.0"
+source = "git+https://github.com/arceos-hypervisor/arm_vgic.git#75450c6124666b9e39763f6a0110903ecdaa3b8f"
+dependencies = [
+ "aarch64-cpu",
+ "aarch64_sysreg",
+ "axaddrspace",
+ "axdevice_base",
+ "axerrno",
+ "axvisor_api",
+ "bitmaps",
+ "log",
+ "memory_addr",
  "spin 0.9.8",
  "tock-registers 0.10.0",
 ]
@@ -256,6 +275,7 @@ checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 [[package]]
 name = "axaddrspace"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axaddrspace.git#dcc7ac91ced6c5ff0e56f90caf2ec7a88ef5a6e9"
 dependencies = [
  "axerrno",
  "bit_field",
@@ -263,7 +283,7 @@ dependencies = [
  "cfg-if",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "memory_set",
  "numeric-enum-macro",
  "page_table_entry",
@@ -279,7 +299,7 @@ dependencies = [
  "cfg-if",
  "kspin",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
 ]
 
 [[package]]
@@ -292,7 +312,7 @@ dependencies = [
 [[package]]
 name = "axconfig"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#4a1942115d6b81c7fb8655a4d95df82e6325ca3f"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#e2345176e6b3b41fbf3061fb8cdb8d846969e415"
 dependencies = [
  "axconfig-macros",
 ]
@@ -331,7 +351,7 @@ dependencies = [
  "linkme",
  "log",
  "loongArch64",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_entry",
  "page_table_multiarch",
  "percpu",
@@ -345,24 +365,30 @@ dependencies = [
 [[package]]
 name = "axdevice"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axdevice.git#17d2b013066d5a7b4e1b1d6b72b025e40b83dcae"
 dependencies = [
+ "arm_vgic",
  "axaddrspace",
  "axdevice_base",
  "axerrno",
  "axvmconfig",
  "cfg-if",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
+ "range-alloc",
+ "spin 0.9.8",
 ]
 
 [[package]]
 name = "axdevice_base"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axdevice_crates.git#a474580797920daebb032870cc3f8ff4edbe88ec"
 dependencies = [
  "axaddrspace",
  "axerrno",
+ "axvmconfig",
  "cfg-if",
- "memory_addr 0.4.0",
+ "memory_addr",
  "serde",
 ]
 
@@ -383,7 +409,7 @@ dependencies = [
  "crate_interface",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "rdrive",
 ]
 
@@ -516,9 +542,18 @@ dependencies = [
  "lazyinit",
  "linkme",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_multiarch",
  "percpu",
+]
+
+[[package]]
+name = "axhvc"
+version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axhvc.git#e4ca6f919b9900f35e42b9b30863550a50432220"
+dependencies = [
+ "axerrno",
+ "numeric-enum-macro",
 ]
 
 [[package]]
@@ -551,7 +586,7 @@ dependencies = [
  "kspin",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "memory_set",
 ]
 
@@ -575,7 +610,7 @@ dependencies = [
  "crate_interface",
  "handler_table",
  "kspin",
- "memory_addr 0.4.0",
+ "memory_addr",
 ]
 
 [[package]]
@@ -589,13 +624,13 @@ dependencies = [
  "crate_interface",
  "handler_table",
  "kspin",
- "memory_addr 0.4.0",
+ "memory_addr",
 ]
 
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#7060b94fd2f3d06d2ed3240a6fa3bcee66baa134"
+source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#4bb13061d36b32043963923bb175e9130011284c"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
@@ -607,7 +642,7 @@ dependencies = [
  "heapless",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_entry",
  "percpu",
  "pie-boot",
@@ -781,7 +816,7 @@ dependencies = [
  "kspin",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "percpu",
  "scheduler",
  "timer_list",
@@ -790,10 +825,12 @@ dependencies = [
 [[package]]
 name = "axvcpu"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvcpu.git#0dae892519655342b8c7918460a6208d8c251526"
 dependencies = [
  "axaddrspace",
  "axerrno",
- "memory_addr 0.3.2",
+ "axvisor_api",
+ "memory_addr",
  "percpu",
 ]
 
@@ -803,18 +840,25 @@ version = "0.1.0"
 dependencies = [
  "axaddrspace",
  "axconfig 0.1.0 (git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev)",
+ "axdevice",
+ "axdevice_base",
  "axerrno",
+ "axhvc",
  "axplat-aarch64-dyn",
  "axstd",
  "axvcpu",
+ "axvisor_api",
  "axvm",
  "bitflags 2.9.1",
  "cfg-if",
+ "cpumask",
  "crate_interface",
+ "fdt-parser",
+ "kernel_guard",
  "kspin",
  "lazyinit",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_entry",
  "page_table_multiarch",
  "percpu",
@@ -829,16 +873,18 @@ dependencies = [
 [[package]]
 name = "axvisor_api"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#4102b0a4d8bce0eef45959ad82fb932aee362841"
 dependencies = [
  "axaddrspace",
  "axvisor_api_proc",
  "crate_interface",
- "memory_addr 0.4.0",
+ "memory_addr",
 ]
 
 [[package]]
 name = "axvisor_api_proc"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvisor_api.git#4102b0a4d8bce0eef45959ad82fb932aee362841"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -849,16 +895,20 @@ dependencies = [
 [[package]]
 name = "axvm"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvm.git#93b8ee5bb40c9705f667af783e6da065531f6869"
 dependencies = [
  "arm_vcpu",
+ "arm_vgic",
  "axaddrspace",
  "axdevice",
+ "axdevice_base",
  "axerrno",
  "axvcpu",
  "axvmconfig",
  "cfg-if",
+ "cpumask",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_entry",
  "page_table_multiarch",
  "percpu",
@@ -870,9 +920,10 @@ dependencies = [
 [[package]]
 name = "axvmconfig"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axvmconfig.git#19e73fc71c48c0af49f6fda960c144b297e41435"
+source = "git+https://github.com/arceos-hypervisor/axvmconfig.git#6704074b63f79ed904d98cc27cd166779c3546d6"
 dependencies = [
  "axerrno",
+ "enumerable",
  "log",
  "serde",
  "serde_repr",
@@ -1046,9 +1097,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.29"
+version = "1.2.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c1599538de2394445747c8cf7935946e3cc27e9625f889d979bfb2aaf569362"
+checksum = "deec109607ca693028562ed836a5f1c4b8bd77755c4e132fc5ce11b0b6211ae7"
 dependencies = [
  "shlex",
 ]
@@ -1142,9 +1193,9 @@ dependencies = [
 
 [[package]]
 name = "const-str"
-version = "0.6.2"
+version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e991226a70654b49d34de5ed064885f0bef0348a8e70018b8ff1ac80aa984a2"
+checksum = "041fbfcf8e7054df725fb9985297e92422cdc80fcf313665f5ca3d761bb63f4c"
 
 [[package]]
 name = "core-foundation"
@@ -1184,9 +1235,9 @@ dependencies = [
 
 [[package]]
 name = "crc32fast"
-version = "1.4.2"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a97769d94ddab943e4510d138150169a2758b5ef3eb191a9ee688de3e23ef7b3"
+checksum = "9481c1c90cbf2ac953f07c8d4a58aa3945c425b7185c9154d67a65e4230da511"
 dependencies = [
  "cfg-if",
 ]
@@ -1301,6 +1352,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa18ce2bc66555b3218614519ac839ddb759a7d6720732f979ef8d13be147ecd"
 dependencies = [
  "once_cell",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.104",
+]
+
+[[package]]
+name = "enumerable"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d05481ae0c653c7de79f2f62d515b09049fed59cbfc5755a4afe55c95181492b"
+dependencies = [
+ "enumerable_derive",
+]
+
+[[package]]
+name = "enumerable_derive"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ef47b28174f7ef4ccb124c8766565006263114c1cc129cd119a66f1e15635125"
+dependencies = [
+ "proc-macro-crate",
  "proc-macro2",
  "quote",
  "syn 2.0.104",
@@ -2013,12 +2085,6 @@ dependencies = [
 
 [[package]]
 name = "memory_addr"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5438b8df0f13e16e1f46140de247695a95952a5a4479e47197a8711bf1063373"
-
-[[package]]
-name = "memory_addr"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d4054cba279515fa87761b101d857333ce06391dbe8f18a11347204a7111416"
@@ -2029,7 +2095,7 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e7d47cbc25a4d00427f9070fd768eaf907f19c903fb72b547b19db2d56b9408e"
 dependencies = [
- "memory_addr 0.4.0",
+ "memory_addr",
 ]
 
 [[package]]
@@ -2211,7 +2277,7 @@ checksum = "ba811ef8ca8fb33d776e128624cb4fe25c9804cab96f83b822d4322431e6dd5a"
 dependencies = [
  "aarch64-cpu",
  "bitflags 2.9.1",
- "memory_addr 0.4.0",
+ "memory_addr",
  "x86_64",
 ]
 
@@ -2223,7 +2289,7 @@ checksum = "98cb76e21ce462270afd83b331599d5b83f876c2a98c0a70382b20d73e1da6be"
 dependencies = [
  "bitmaps",
  "log",
- "memory_addr 0.4.0",
+ "memory_addr",
  "page_table_entry",
  "riscv 0.14.0",
  "x86",
@@ -2434,6 +2500,11 @@ checksum = "99d9a13982dcf210057a8a78572b2217b667c3beacbf3a0d8b454f6f82837d38"
 dependencies = [
  "getrandom 0.3.3",
 ]
+
+[[package]]
+name = "range-alloc"
+version = "0.1.4"
+source = "git+https://github.com/arceos-hypervisor/range-alloc.git#fc826e54dab9072be5358a1b0e7fc34503d6630d"
 
 [[package]]
 name = "raw-cpuid"
@@ -2721,7 +2792,7 @@ dependencies = [
 [[package]]
 name = "riscv_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git#d457d81bab48e3525ff98987b5220572f7968d47"
+source = "git+https://github.com/arceos-hypervisor/riscv_vcpu.git#f25f274f88376c2b4a80dcb5549f46a9b4b10559"
 dependencies = [
  "axaddrspace",
  "axerrno",
@@ -2733,14 +2804,14 @@ dependencies = [
  "crate_interface",
  "log",
  "memoffset",
- "memory_addr 0.3.2",
+ "memory_addr",
  "page_table_entry",
  "riscv 0.6.0",
  "riscv-decode",
  "rustsbi",
  "sbi-rt",
  "sbi-spec",
- "tock-registers 0.8.1",
+ "tock-registers 0.9.0",
 ]
 
 [[package]]
@@ -2772,22 +2843,22 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "1.0.7"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c71e83d6afe7ff64890ec6b71d6a69bb8a610ab78ce364b3352876bb4c801266"
+checksum = "11181fbabf243db407ef8df94a6ce0b2f9a733bd8be4ad02b4eda9602296cac8"
 dependencies = [
  "bitflags 2.9.1",
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.52.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
 name = "rustls"
-version = "0.23.28"
+version = "0.23.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7160e3e10bf4535308537f3c4e1641468cd0e485175d6163087c0393c7d46643"
+checksum = "2491382039b29b9b11ff08b76ff6c97cf287671dbb74f0be44bda389fffe9bd1"
 dependencies = [
  "once_cell",
  "rustls-pki-types",
@@ -2807,9 +2878,9 @@ dependencies = [
 
 [[package]]
 name = "rustls-webpki"
-version = "0.103.3"
+version = "0.103.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4a72fe2bcf7a6ac6fd7d0b9e5cb68aeb7d4c0a0271730218b3e92d43b4eb435"
+checksum = "0a17884ae0c1b773f1ccd2bd4a8c72f16da897310a98b0e84bf349ad5ead92fc"
 dependencies = [
  "ring",
  "rustls-pki-types",
@@ -3213,7 +3284,7 @@ dependencies = [
  "getrandom 0.3.3",
  "once_cell",
  "rustix",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3415,7 +3486,7 @@ dependencies = [
  "serde_spanned 0.6.9",
  "toml_datetime 0.6.11",
  "toml_write",
- "winnow 0.7.11",
+ "winnow 0.7.12",
 ]
 
 [[package]]
@@ -3890,9 +3961,9 @@ checksum = "1e90edd2ac1aa278a5c4599b1d89cf03074b610800f866d4026dc199d7929a28"
 
 [[package]]
 name = "winnow"
-version = "0.7.11"
+version = "0.7.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74c7b26e3480b707944fc872477815d29a8e429d2f93a1ce000f5fa84a15cbcd"
+checksum = "f3edebf492c8125044983378ecb5766203ad3b4c2f7a922bd7dd207f6d443e95"
 dependencies = [
  "memchr",
 ]
@@ -3951,7 +4022,7 @@ dependencies = [
 [[package]]
 name = "x86_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/x86_vcpu.git#0d73ec10b04e187c6aabd110123a6bf96e2f2ae0"
+source = "git+https://github.com/arceos-hypervisor/x86_vcpu.git#a18a499bd166088ff05e19805cfe9aafa21aab96"
 dependencies = [
  "axaddrspace",
  "axdevice_base",
@@ -3963,7 +4034,7 @@ dependencies = [
  "cfg-if",
  "crate_interface",
  "log",
- "memory_addr 0.3.2",
+ "memory_addr",
  "numeric-enum-macro",
  "page_table_entry",
  "paste",
@@ -3976,7 +4047,7 @@ dependencies = [
 [[package]]
 name = "x86_vlapic"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/x86_vlapic.git#7fdd40cd67711cdf8cfa1673f1d62d326d66b1d0"
+source = "git+https://github.com/arceos-hypervisor/x86_vlapic.git#1f3edfb03f9ac99bfe567b73fb59779eaac32235"
 dependencies = [
  "axaddrspace",
  "axdevice_base",
@@ -3984,9 +4055,9 @@ dependencies = [
  "axvisor_api",
  "bit",
  "log",
- "memory_addr 0.3.2",
+ "memory_addr",
  "paste",
- "tock-registers 0.9.0",
+ "tock-registers 0.10.0",
 ]
 
 [[package]]
