@@ -23,3 +23,9 @@ setup-arceos:
 # 透传所有其他目标到 .arceos
 run: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) run
+
+clean: setup-arceos
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clean
+
+disk_img: setup-arceos
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) disk_img
