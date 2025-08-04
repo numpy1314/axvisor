@@ -3,6 +3,16 @@ ifneq ($(VM_CONFIGS),)
   export AXVISOR_VM_CONFIGS=$(VM_CONFIGS)
 endif
 
+PLAT ?= aarch64-generic
+
+PLAT_DIR := $(shell pwd)/platform/$(PLAT)
+
+MYPLAT := axplat-$(PLAT)
+
+HV_FEATURES ?= 
+
+APP_FEATURES := $(HV_FEATURES),plat-$(PLAT)
+
 # 默认目标
 .PHONY: default
 default: setup-arceos
@@ -22,7 +32,7 @@ setup-arceos:
 
 # 透传所有其他目标到 .arceos
 run: setup-arceos
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) run
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) APP_FEATURES=$(APP_FEATURES) $@ $(MAKEFLAGS) run
 
 clean: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clean
@@ -34,4 +44,4 @@ clippy: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clippy
 
 build: setup-arceos
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) build
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x  $@ $(MAKEFLAGS) build

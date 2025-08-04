@@ -8,7 +8,8 @@ extern crate alloc;
 
 extern crate axstd as std;
 
-extern crate axplat_aarch64_dyn;
+#[cfg(feature = "plat-aarch64-generic")]
+extern crate axplat_aarch64_generic;
 
 mod hal;
 mod logo;
