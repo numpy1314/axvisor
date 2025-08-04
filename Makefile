@@ -32,3 +32,6 @@ disk_img: setup-arceos
 
 clippy: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clippy
+
+build: setup-arceos
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) build
