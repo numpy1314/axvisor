@@ -89,11 +89,12 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
         }
 
         if let Some(status) = node.status()
-            && status == Status::Disabled {
-                // Skip disabled nodes
-                trace!("DTB node: {} is disabled", name);
-                // continue;
-            }
+            && status == Status::Disabled
+        {
+            // Skip disabled nodes
+            trace!("DTB node: {} is disabled", name);
+            // continue;
+        }
 
         // Skip the interrupt controller, as we will use vGIC
         // TODO: filter with compatible property and parse its phandle from DT; maybe needs a second pass?
