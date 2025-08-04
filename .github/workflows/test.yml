@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         arch: [riscv64, aarch64]
-        rust-toolchain: [nightly-2024-12-25, nightly]
+        rust-toolchain: [nightly-2025-05-20, nightly]
     steps:
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
@@ -55,7 +55,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: [x86_64]
-        rust-toolchain: [nightly-2024-12-25, nightly]
+        rust-toolchain: [nightly-2025-05-20, nightly]
         remote: [remote_aarkegz, remote_x10dri]
         include:
         - remote: remote_aarkegz
