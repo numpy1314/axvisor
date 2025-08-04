@@ -1,4 +1,3 @@
-use alloc::boxed::Box;
 use axaddrspace::{
     GuestPhysAddrRange,
     device::{AccessWidth, DeviceAddrRange},

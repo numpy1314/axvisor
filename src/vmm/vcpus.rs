@@ -6,10 +6,7 @@ use core::{
     time::Duration,
 };
 use std::os::arceos::{
-    api::{
-        self,
-        task::{ax_wait_queue_wake, AxCpuMask},
-    },
+    api::task::{AxCpuMask, ax_wait_queue_wake},
     modules::{
         axhal::{self, time::busy_wait},
         axtask,
@@ -46,6 +43,7 @@ impl Queue {
         unsafe { (*self.0.get()).get(vm_id) }
     }
 
+    #[allow(clippy::mut_from_ref)]
     fn get_mut(&self, vm_id: &usize) -> Option<&mut VMVCpus> {
         unsafe { (*self.0.get()).get_mut(vm_id) }
     }

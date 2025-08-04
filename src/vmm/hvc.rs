@@ -141,7 +141,7 @@ impl HyperCall {
             }
             _ => {
                 warn!("Unsupported hypercall code: {:?}", self.code);
-                return ax_err!(Unsupported);
+                ax_err!(Unsupported)
             }
         }
     }

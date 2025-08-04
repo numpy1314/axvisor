@@ -87,7 +87,7 @@ pub fn get_channel_size(publisher_vm_id: usize, key: usize) -> AxResult<usize> {
 
 /// Subcribe to a channel of a publisher VM with the given key,
 /// return the shared region base address and size.
-pub fn subscribe_to_channel_of_publisher<'a>(
+pub fn subscribe_to_channel_of_publisher(
     publisher_vm_id: usize,
     key: usize,
     subscriber_vm_id: usize,
@@ -140,7 +140,7 @@ pub fn unsubscribe_from_channel_of_publisher(
 
     // If the channel has no subscribers and has been unpublished (base GPA is None),
     // remove it from the global map.
-    if channels.get(&(publisher_vm_id, key)).map_or(false, |c| {
+    if channels.get(&(publisher_vm_id, key)).is_some_and(|c| {
         c.subscribers().is_empty() && c.base_gpa.is_none()
     }) {
         channels.remove(&(publisher_vm_id, key));
@@ -266,9 +266,7 @@ impl<H: PagingHandler> IVCChannel<H> {
     }
 
     pub fn add_subscriber(&mut self, subscriber_vm_id: usize, subscriber_gpa: GuestPhysAddr) {
-        if !self.subscriber_vms.contains_key(&subscriber_vm_id) {
-            self.subscriber_vms.insert(subscriber_vm_id, subscriber_gpa);
-        }
+        self.subscriber_vms.entry(subscriber_vm_id).or_insert(subscriber_gpa);
     }
 
     pub fn remove_subscriber(&mut self, subscriber_vm_id: usize) -> Option<GuestPhysAddr> {

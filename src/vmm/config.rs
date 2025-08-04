@@ -48,7 +48,7 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
             if region.size == 0 {
                 continue;
             }
-            dram_regions.push((region.address as usize, region.size as usize));
+            dram_regions.push((region.address as usize, region.size));
         }
     }
 
@@ -61,7 +61,7 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
             warn!("DTB memory region: {:?}", region);
             vm_cfg.add_memory_region(VmMemConfig {
                 gpa: region.address as usize,
-                size: region.size as usize,
+                size: region.size,
                 flags: (MappingFlags::READ
                     | MappingFlags::WRITE
                     | MappingFlags::EXECUTE
@@ -88,13 +88,12 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
             continue;
         }
 
-        if let Some(status) = node.status() {
-            if status == Status::Disabled {
+        if let Some(status) = node.status()
+            && status == Status::Disabled {
                 // Skip disabled nodes
                 trace!("DTB node: {} is disabled", name);
                 // continue;
             }
-        }
 
         // Skip the interrupt controller, as we will use vGIC
         // TODO: filter with compatible property and parse its phandle from DT; maybe needs a second pass?
@@ -178,7 +177,7 @@ pub fn parse_vm_dtb(vm_cfg: &mut AxVMConfig, dtb: &[u8]) {
 
                 if let Some(size) = reg.size {
                     let start = reg.address as usize;
-                    let end = start + size as usize;
+                    let end = start + size;
                     if vm_cfg.contains_memory_range(&(start..end)) {
                         trace!(
                             "Skipping DTB node {} with register address {:#x} and size {:#x} as it overlaps with existing memory regions",
