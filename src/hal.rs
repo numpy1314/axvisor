@@ -309,8 +309,10 @@ mod arch_api_impl {
     #[cfg(target_arch = "aarch64")]
     extern fn get_host_gicr_base() -> memory_addr::PhysAddr {
         use std::os::arceos::api::config;
-        unimplemented!();
+        // unimplemented!();
         // config::devices::GICR_PADDR.into()
+        // TODO parse from dtb
+        0x80a_0000.into()
     }
 }
 
