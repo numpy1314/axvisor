@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+use core::hint::spin_loop;
+
 #[macro_use]
 extern crate log;
 #[macro_use]

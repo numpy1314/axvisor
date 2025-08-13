@@ -132,9 +132,9 @@ dependencies = [
 
 [[package]]
 name = "any-uart"
-version = "0.2.11"
+version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d946430e1de45608625428bac646b79e02fb83e1d2e46eec27afa2556f038e65"
+checksum = "4ce5f140efb4e707ea8f8e894d5f710500e373be1c4435d56b28d1fd1f843341"
 dependencies = [
  "bitflags 2.9.1",
  "cfg-if",
@@ -212,7 +212,6 @@ dependencies = [
 [[package]]
 name = "arm_vcpu"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arm_vcpu.git#5cb792296f7865f7031fcd502c62a51cbeb59dab"
 dependencies = [
  "aarch64-cpu",
  "axaddrspace",
@@ -633,7 +632,6 @@ dependencies = [
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#4bb13061d36b32043963923bb175e9130011284c"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",

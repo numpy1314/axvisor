@@ -1,6 +1,7 @@
 use core::sync::atomic::AtomicUsize;
 use core::sync::atomic::Ordering;
 
+use core::time::Duration;
 use std::os::arceos::modules::{axconfig, axhal};
 
 use alloc::boxed::Box;
@@ -101,7 +102,7 @@ pub fn scheduler_next_event() {
     trace!("Scheduling next event...");
     let now_ns = axhal::time::monotonic_time_nanos();
     let deadline = now_ns + PERIODIC_INTERVAL_NANOS;
-    trace!("PHY deadline {} !!!", deadline);
+    debug!("PHY deadline {} !!!", deadline);
     axhal::time::set_oneshot_timer(deadline);
 }
 
