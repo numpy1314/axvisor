@@ -209,7 +209,23 @@ You can refer to these [discussions]((https://github.com/arceos-hypervisor/axvis
 
 ## Development
 
-AxVisor, as a modular hypervisor, has many components used as Crates. You can use the `tool/dev_env.py` command to localize the relevant Crates, making it easier for development and debugging.
+To contribute to AxVisor, you can follow these steps:
+
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+3. Create a new branch for your feature or bug fix.
+4. Make your changes and commit them with clear messages.
+5. Push your changes to your forked repository.
+6. Open a pull request against the main branch of the original repository.
+
+To develop crates used by AxVisor, you can use the following command to build and run the project:
+
+```bash
+cargo install cargo-lpatch
+cargo lpatch -n deps_crate_name
+```
+
+Then you can modify the code in the `crates/deps_crate_name` directory, and it will be automatically used by AxVisor.
 
 ## Contributors
 
