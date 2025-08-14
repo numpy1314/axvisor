@@ -250,7 +250,7 @@ mod vmm_api_impl {
         vmm::with_wm(vm_id, |vm| vm.vcpu_num())
     }
 
-    extern fn active_vcpus(vm_id: VMId) -> Option<usize> {
+    extern fn active_vcpus(_vm_id: VMId) -> Option<usize> {
         todo!("active_vcpus")
     }
 
@@ -258,7 +258,7 @@ mod vmm_api_impl {
         <AxVMHalImpl as AxVMHal>::inject_irq_to_vcpu(vm_id, vcpu_id, vector as usize).unwrap();
     }
 
-    extern fn notify_vcpu_timer_expired(vm_id: VMId, vcpu_id: VCpuId) {
+    extern fn notify_vcpu_timer_expired(_vm_id: VMId, _vcpu_id: VCpuId) {
         todo!("notify_vcpu_timer_expired")
         // vmm::timer::notify_timer_expired(vm_id, vcpu_id);
     }
@@ -280,8 +280,8 @@ mod arch_api_impl {
         // use axstd::os::arceos::modules::axhal::irq::MyVgic;
         // MyVgic::get_gicd().lock().get_typer()
 
-        use memory_addr::pa;
-        use std::os::arceos::modules::{axconfig, axhal};
+        // use memory_addr::pa;
+        // use std::os::arceos::modules::{axconfig, axhal};
 
         unimplemented!();
         // let typer_phys_addr = axconfig::devices::GICD_PADDR + 0x4;
@@ -299,7 +299,7 @@ mod arch_api_impl {
 
     #[cfg(target_arch = "aarch64")]
     extern fn get_host_gicd_base() -> memory_addr::PhysAddr {
-        use std::os::arceos::api::config;
+        // use std::os::arceos::api::config;
         // unimplemented!();
         // config::devices::GICD_PADDR.into()
         0x800_0000.into()
@@ -307,7 +307,7 @@ mod arch_api_impl {
 
     #[cfg(target_arch = "aarch64")]
     extern fn get_host_gicr_base() -> memory_addr::PhysAddr {
-        use std::os::arceos::api::config;
+        // use std::os::arceos::api::config;
         // unimplemented!();
         // config::devices::GICR_PADDR.into()
         // TODO parse from dtb

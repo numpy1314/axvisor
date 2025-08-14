@@ -30,9 +30,15 @@ setup-arceos:
 		echo ".arceos 文件夹已存在"; \
 	fi
 
+default: setup-arceos
+	@echo "执行 arceos 构建..."
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
+	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)
+
 # 透传所有其他目标到 .arceos
 run: setup-arceos
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) APP_FEATURES=$(APP_FEATURES) $@ $(MAKEFLAGS) run
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
+	 APP_FEATURES=$(APP_FEATURES) $@ $(MAKEFLAGS) QEMU_ARGS="-machine virtualization=on,gic-version=3"  run
 
 clean: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clean

@@ -148,9 +148,7 @@ impl VMVCpus {
 /// * `vm_id` - The ID of the VM whose VCpu wait queue is used to block the current thread.
 ///
 fn wait(vm_id: usize) {
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
-        .unwrap()
-        .wait()
+    VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id).unwrap().wait()
 }
 
 /// Blocks the current thread until the provided condition is met, using the wait queue
@@ -165,7 +163,8 @@ fn wait_for<F>(vm_id: usize, condition: F)
 where
     F: Fn() -> bool,
 {
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get(&vm_id)
         .unwrap()
         .wait_until(condition)
 }
@@ -179,14 +178,16 @@ where
 ///
 pub(crate) fn notify_primary_vcpu(vm_id: usize) {
     // Generally, the primary VCpu is the first and **only** VCpu in the list.
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get_mut(&vm_id) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get_mut(&vm_id)
         .unwrap()
         .notify_one()
 }
 
 /// Marks the VCpu of the specified VM as running.
 fn mark_vcpu_running(vm_id: usize) {
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get(&vm_id)
         .unwrap()
         .mark_vcpu_running();
 }
@@ -194,7 +195,8 @@ fn mark_vcpu_running(vm_id: usize) {
 /// Marks the VCpu of the specified VM as exiting for VM shutdown. Returns true if this was the last
 /// VCpu to exit.
 fn mark_vcpu_exiting(vm_id: usize) -> bool {
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get(&vm_id)
         .unwrap()
         .mark_vcpu_exiting()
 }
@@ -235,7 +237,8 @@ fn vcpu_on(vm: VMRef, vcpu_id: usize, entry_point: GuestPhysAddr, arg: usize) {
 
     let vcpu_task = alloc_vcpu_task(vm.clone(), vcpu);
 
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get_mut(&vm.id()) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get_mut(&vm.id())
         .unwrap()
         .add_vcpu_task(vcpu_task);
 }
@@ -258,9 +261,8 @@ pub fn setup_vm_primary_vcpu(vm: VMRef) {
     let primary_vcpu = vm.vcpu_list()[primary_vcpu_id].clone();
     let primary_vcpu_task = alloc_vcpu_task(vm.clone(), primary_vcpu);
     vm_vcpus.add_vcpu_task(primary_vcpu_task);
-    unsafe {
-        VM_VCPU_TASK_WAIT_QUEUE.insert(vm_id, vm_vcpus);
-    }
+
+    VM_VCPU_TASK_WAIT_QUEUE.insert(vm_id, vm_vcpus);
 }
 
 /// Finds the [`AxTaskRef`] associated with the specified vCPU of the specified VM.
@@ -274,7 +276,8 @@ pub fn with_vcpu_task<T, F: FnOnce(&AxTaskRef) -> T>(
     vcpu_id: usize,
     f: F,
 ) -> Option<T> {
-    unsafe { VM_VCPU_TASK_WAIT_QUEUE.get(&vm_id) }
+    VM_VCPU_TASK_WAIT_QUEUE
+        .get(&vm_id)
         .unwrap()
         .vcpu_task_list
         .get(vcpu_id)

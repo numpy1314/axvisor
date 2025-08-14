@@ -10,10 +10,7 @@ mod vm_list;
 use core::sync::atomic::{AtomicUsize, Ordering};
 use std::os::arceos::{
     api::task::{self, AxWaitQueueHandle},
-    modules::{
-        axhal,
-        axtask::{self, TaskExtRef},
-    },
+    modules::axtask::{self, TaskExtRef},
 };
 
 use axerrno::{AxResult, ax_err_type};
@@ -119,7 +116,7 @@ pub fn with_vm_and_vcpu_on_pcpu(
     // The target vCPU is not the current task, send an IPI to the target physical CPU.
     drop(guard);
 
-    let pcpu_id = vcpus::with_vcpu_task(vm_id, vcpu_id, |task| task.cpu_id())
+    let _pcpu_id = vcpus::with_vcpu_task(vm_id, vcpu_id, |task| task.cpu_id())
         .ok_or_else(|| ax_err_type!(NotFound))?;
 
     unimplemented!();

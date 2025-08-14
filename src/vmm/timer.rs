@@ -1,7 +1,6 @@
 use core::sync::atomic::AtomicUsize;
 use core::sync::atomic::Ordering;
 
-use core::time::Duration;
 use std::os::arceos::modules::{axconfig, axhal};
 
 use alloc::boxed::Box;

@@ -20,17 +20,17 @@ impl BaseDeviceOps<GuestPhysAddrRange> for MockTimer {
 
     fn handle_read(
         &self,
-        addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
-        width: AccessWidth,
+        _addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
+        _width: AccessWidth,
     ) -> axerrno::AxResult<usize> {
         todo!()
     }
 
     fn handle_write(
         &self,
-        addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
-        width: AccessWidth,
-        val: usize,
+        _addr: <GuestPhysAddrRange as DeviceAddrRange>::Addr,
+        _width: AccessWidth,
+        _val: usize,
     ) -> axerrno::AxResult {
         todo!()
     }
