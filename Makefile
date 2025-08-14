@@ -17,7 +17,8 @@ APP_FEATURES := $(HV_FEATURES),plat-$(PLAT)
 .PHONY: default
 default: setup-arceos
 	@echo "执行 arceos 构建..."
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x  $(MAKEFLAGS)
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x  MYPLAT=$(MYPLAT) \
+	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)
 
 # 设置 arceos 依赖
 .PHONY: setup-arceos
@@ -30,15 +31,10 @@ setup-arceos:
 		echo ".arceos 文件夹已存在"; \
 	fi
 
-default: build
-	@echo "执行 arceos 构建..."
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
-	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)
-
 # 透传所有其他目标到 .arceos
 run: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
-	 APP_FEATURES=$(APP_FEATURES) $@ $(MAKEFLAGS) QEMU_ARGS="-machine virtualization=on,gic-version=3"  run
+	 APP_FEATURES=$(APP_FEATURES) $@ $(MAKEFLAGS) QEMU_ARGS="-machine virtualization=on"  run
 
 clean: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clean
@@ -49,7 +45,4 @@ disk_img: setup-arceos
 clippy: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clippy
 
-build: setup-arceos
-	@echo "执行 arceos 构建..."
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
-	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)
+build: default
