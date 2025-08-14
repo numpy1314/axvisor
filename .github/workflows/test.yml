@@ -47,7 +47,7 @@ jobs:
         cargo version
         export DISK_IMG="${{ github.workspace }}/disk-aarch64.img"
         export VM_CONFIGS="$(pwd)/configs/vms/nimbos-aarch64.toml"
-        make PLAT=${{ matrix.plat }} DISK_IMG=${DISK_IMG} LOG=info BLK=y ACCEL=n VM_CONFIGS=${VM_CONFIGS} HV_FEATURES=fs run
+        make PLAT=${{ matrix.plat }} DISK_IMG=${DISK_IMG} LOG=info BLK=y ACCEL=n VM_CONFIGS=${VM_CONFIGS} BUS=mmio FEATURES=page-alloc-64g MEM=8g HV_FEATURES=fs run
 
   test_remote:
     runs-on: ubuntu-latest
