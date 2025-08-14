@@ -30,7 +30,7 @@ setup-arceos:
 		echo ".arceos 文件夹已存在"; \
 	fi
 
-default: setup-arceos
+default: build
 	@echo "执行 arceos 构建..."
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
 	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)
@@ -50,4 +50,6 @@ clippy: setup-arceos
 	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x $@ $(MAKEFLAGS) clippy
 
 build: setup-arceos
-	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x  $@ $(MAKEFLAGS) build
+	@echo "执行 arceos 构建..."
+	@$(MAKE) -C .arceos A=$(shell pwd) LD_SCRIPT=link.x MYPLAT=$(MYPLAT) \
+	 APP_FEATURES=$(APP_FEATURES) $(MAKEFLAGS)

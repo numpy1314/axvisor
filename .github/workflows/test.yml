@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         # arch: [riscv64, aarch64]
-        plat: [aarch64-dyn]
+        plat: [aarch64-generic]
         rust-toolchain: [nightly-2025-05-20, nightly]
     steps:
     - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
         cargo version
         export DISK_IMG="${{ github.workspace }}/disk-aarch64.img"
         export VM_CONFIGS="$(pwd)/configs/vms/nimbos-aarch64.toml"
-        make MYPLAT=axplat-${{ matrix.plat }} DISK_IMG=${DISK_IMG} LOG=info BLK=y ACCEL=n VM_CONFIGS=${VM_CONFIGS} APP_FEATURES=fs run
+        make PLAT=${{ matrix.plat }} DISK_IMG=${DISK_IMG} LOG=info BLK=y ACCEL=n VM_CONFIGS=${VM_CONFIGS} APP_FEATURES=fs run
 
   test_remote:
     runs-on: ubuntu-latest
