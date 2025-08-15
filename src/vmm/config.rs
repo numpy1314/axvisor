@@ -31,8 +31,8 @@ pub mod config {
 pub fn get_vm_dtb(vm_cfg: &AxVMConfig) -> Option<&'static [u8]> {
     let vm_imags = config::get_memory_images()
         .iter()
-        .find(|&v| v.id == vm_cfg.id())
-        .expect("VM images is missed, Perhaps add `VM_CONFIGS=PATH/CONFIGS/FILE` command.");
+        .find(|&v| v.id == vm_cfg.id())?;
+    // .expect("VM images is missed, Perhaps add `VM_CONFIGS=PATH/CONFIGS/FILE` command.");
     vm_imags.dtb
 }
 
