@@ -64,6 +64,7 @@ jobs:
         targets: x86_64-unknown-none, riscv64gc-unknown-none-elf, aarch64-unknown-none, aarch64-unknown-none-softfloat
     - uses: Swatinem/rust-cache@v2
     - run: cargo install cargo-binutils
+    - run: ./bootstrap.sh
     - name: Build the repo
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
-      run: make PLAT=${{ matrix.plat }} build
+      run: ./task.py build --plat ${{ matrix.plat }}

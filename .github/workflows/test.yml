@@ -41,13 +41,16 @@ jobs:
     - name: Update rust-toolchain.toml
       run: |
         sed -i "s/^channel = .*/channel = \"${{ matrix.rust-toolchain }}\"/" rust-toolchain.toml
+    - name: bootstrap
+      run: |
+        ./bootstrap.sh
     - name: Run guests
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
       run: |
         cargo version
         export DISK_IMG="${{ github.workspace }}/disk-aarch64.img"
         export VM_CONFIGS="$(pwd)/configs/vms/nimbos-aarch64.toml"
-        make PLAT=${{ matrix.plat }} DISK_IMG=${DISK_IMG} LOG=info BLK=y ACCEL=n VM_CONFIGS=${VM_CONFIGS} BUS=mmio FEATURES=page-alloc-64g MEM=8g HV_FEATURES=fs run
+        ./task.py run --plat ${{ matrix.plat }} --disk $DISK_IMG --vm-configs $VM_CONFIGS --arceos-args BUS=mmio,BLK=y,MEM=8g
 
   test_remote:
     runs-on: ubuntu-latest
