@@ -206,14 +206,11 @@ class AxvisorConfig:
         make_vars = self.get_make_variables()
         env_vars = self.get_env_variables()
 
-        cmd_parts = []
+        cmd_parts = format_make_command_base()
 
         # 添加环境变量
         for key, value in env_vars.items():
             cmd_parts.append(f"{key}={value}")
-
-        # 添加 make 命令
-        cmd_parts.extend(["make", "-C", ".arceos"])
 
         # 添加 make 变量
         for key, value in make_vars.items():
@@ -303,6 +300,45 @@ def add_common_arguments(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def save_config_to_file(
+    config: AxvisorConfig, config_path: str = ".hvconfig.toml"
+) -> bool:
+    """将配置保存到文件"""
+    try:
+        import toml
+
+        # 准备配置数据
+        config_data = {}
+
+        config_data["plat"] = config.plat
+
+        if config.features:
+            config_data["features"] = config.features
+
+        if config.arceos_features:
+            config_data["arceos_features"] = config.arceos_features
+
+        if config.arceos_args:
+            config_data["arceos_args"] = config.arceos_args
+
+        if config.vmconfigs:
+            config_data["vmconfigs"] = config.vmconfigs
+
+        # 写入文件
+        with open(config_path, "w", encoding="utf-8") as f:
+            toml.dump(config_data, f)
+
+        print(f"配置已保存到 {config_path}")
+        return True
+
+    except ImportError:
+        print("警告：需要安装 toml 库来保存配置文件")
+        return False
+    except Exception as e:
+        print(f"警告：保存配置文件 {config_path} 失败: {e}")
+        return False
+
+
 def create_config_from_args(args: argparse.Namespace) -> AxvisorConfig:
     """从命令行参数和配置文件创建配置对象"""
     # 加载配置文件
@@ -389,25 +425,3 @@ def format_make_command_base() -> List[str]:
     cmd_parts = []
     cmd_parts.extend(["make", "-C", ".arceos", f"A={os.getcwd()}", "LD_SCRIPT=link.x"])
     return cmd_parts
-
-
-def format_make_command(
-    make_vars: Dict[str, str],
-    env_vars: Optional[Dict[str, str]] = None,
-    target: str = "",
-) -> str:
-    """保持向后兼容的函数"""
-    cmd_parts = format_make_command_base()
-    # 添加 make 变量
-    for key, value in make_vars.items():
-        cmd_parts.append(f"{key}={value}")
-
-    # 注意：QEMU_ARGS 现在应该已经包含在 make_vars 中了（如果需要的话）
-    # 为了向后兼容，如果 make_vars 中没有 QEMU_ARGS，则添加默认值
-    if "QEMU_ARGS" not in make_vars:
-        cmd_parts.append('QEMU_ARGS="-machine virtualization=on"')
-
-    if target:
-        cmd_parts.append(target)
-
-    return " ".join(cmd_parts)

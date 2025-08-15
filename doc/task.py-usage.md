@@ -171,7 +171,6 @@
 ```bash
 --arceos-args "NET=y,BLK=y,MEM=8g"
 --arceos-args "SMP=4,DEBUG=y"
---arceos-args "QEMU_ARGS=\"-smp 4 -m 2G\""
 ```
 
 #### --vmconfigs (VM 配置文件)
