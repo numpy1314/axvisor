@@ -269,10 +269,10 @@ mod arch_api_impl {
     #[cfg(target_arch = "aarch64")]
     extern fn hardware_inject_virtual_interrupt(irq: axvisor_api::vmm::InterruptVector) {
         debug!("Injecting virtual interrupt: {}", irq);
-        // unimplemented!();
+        unimplemented!();
         // use axstd::os::arceos::modules::axhal;
         // axhal::irq::inject_interrupt(irq as usize);
-        super::inject_interrupt(irq as usize);
+        // super::inject_interrupt(irq as usize);
     }
 
     #[cfg(target_arch = "aarch64")]
