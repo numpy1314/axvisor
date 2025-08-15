@@ -59,7 +59,7 @@ runs:
   - name: Create Image
     shell: bash
     run: |
-      make DISK_IMG=${{ inputs.disk-path }} disk_img
+      ./task.py disk_img --image ${{ inputs.disk-path }}
       sudo mkdir -p img
       sudo chown root:root temp/*
       sudo mount ${{ inputs.disk-path }} img

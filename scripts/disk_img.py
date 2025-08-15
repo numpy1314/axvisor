@@ -20,6 +20,10 @@ def main(args) -> int:
 
     cmd = format_make_command_base()
 
+    if args.image:
+        # 如果指定了镜像路径和文件名，则添加到命令中
+        cmd.append(f"DISK_IMG={args.image}")
+
     cmd.append("disk_img")
 
     # 构建 make 命令

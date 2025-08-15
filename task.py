@@ -33,7 +33,13 @@ def main():
     subparsers.add_parser("clean", help="清理构建产物")
 
     # disk_img 命令
-    subparsers.add_parser("disk_img", help="创建磁盘镜像")
+    disk_parser = subparsers.add_parser("disk_img", help="创建磁盘镜像")
+    disk_parser.add_argument(
+        "--image",
+        type=str,
+        default="",
+        help="磁盘镜像路径和文件名",
+    )
 
     args = parser.parse_args()
 
