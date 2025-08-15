@@ -158,10 +158,6 @@ class AxvisorConfig:
         """根据配置生成 make 变量"""
         make_vars = {}
 
-        # 基本的 make 变量
-        make_vars["A"] = os.getcwd()
-        make_vars["LD_SCRIPT"] = "link.x"
-
         # 使用从平台配置文件读取的 package，如果没有则回退到旧的方式
         if self.package:
             make_vars["MYPLAT"] = self.package
@@ -389,22 +385,19 @@ def get_make_variables(
     return config.get_make_variables(), config.get_env_variables()
 
 
+def format_make_command_base() -> List[str]:
+    cmd_parts = []
+    cmd_parts.extend(["make", "-C", ".arceos", f"A={os.getcwd()}", "LD_SCRIPT=link.x"])
+    return cmd_parts
+
+
 def format_make_command(
     make_vars: Dict[str, str],
     env_vars: Optional[Dict[str, str]] = None,
     target: str = "",
 ) -> str:
     """保持向后兼容的函数"""
-    cmd_parts = []
-
-    # 添加环境变量
-    if env_vars:
-        for key, value in env_vars.items():
-            cmd_parts.append(f"{key}={value}")
-
-    # 添加 make 命令
-    cmd_parts.extend(["make", "-C", ".arceos"])
-
+    cmd_parts = format_make_command_base()
     # 添加 make 变量
     for key, value in make_vars.items():
         cmd_parts.append(f"{key}={value}")

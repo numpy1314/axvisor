@@ -21,6 +21,20 @@ def main():
     run_parser = subparsers.add_parser("run", help="运行项目")
     add_common_arguments(run_parser)
 
+    # clippy 命令
+    clippy_parser = subparsers.add_parser("clippy", help="运行 clippy 代码检查")
+    clippy_parser.add_argument(
+        "--arch",
+        type=str,
+        help="Architecture",
+    )
+
+    # clean 命令
+    subparsers.add_parser("clean", help="清理构建产物")
+
+    # disk_img 命令
+    subparsers.add_parser("disk_img", help="创建磁盘镜像")
+
     args = parser.parse_args()
 
     if args.command == "setup":
@@ -33,6 +47,18 @@ def main():
         sys.exit(exit_code)
     elif args.command == "run":
         mod = importlib.import_module("scripts.run")
+        exit_code = mod.main(args)
+        sys.exit(exit_code)
+    elif args.command == "clippy":
+        mod = importlib.import_module("scripts.clippy")
+        exit_code = mod.main(args)
+        sys.exit(exit_code)
+    elif args.command == "clean":
+        mod = importlib.import_module("scripts.clean")
+        exit_code = mod.main(args)
+        sys.exit(exit_code)
+    elif args.command == "disk_img":
+        mod = importlib.import_module("scripts.disk_img")
         exit_code = mod.main(args)
         sys.exit(exit_code)
     else:

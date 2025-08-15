@@ -21,9 +21,10 @@ jobs:
         targets: x86_64-unknown-none, riscv64gc-unknown-none-elf, aarch64-unknown-none, aarch64-unknown-none-softfloat
     - name: Check rust version
       run: rustc --version --verbose
+    - run: ./bootstrap.sh
     - name: Clippy the repo
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
-      run: make ARCH=${{ matrix.arch }} clippy
+      run: ./task.py clippy --arch ${{ matrix.arch }}
 
   fmt:
     runs-on: ubuntu-latest
