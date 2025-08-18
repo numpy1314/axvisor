@@ -13,7 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        # arch: [riscv64, aarch64]
         plat: [aarch64-generic]
         rust-toolchain: [nightly-2025-05-20, nightly]
     steps:
@@ -43,7 +42,7 @@ jobs:
         sed -i "s/^channel = .*/channel = \"${{ matrix.rust-toolchain }}\"/" rust-toolchain.toml
     - name: bootstrap
       run: |
-        ./bootstrap.sh
+        source ./activate.sh
     - name: Run guests
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
       run: |
