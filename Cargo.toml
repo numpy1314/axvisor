@@ -38,9 +38,9 @@ axstd = {git = "https://github.com/arceos-hypervisor/arceos.git", branch = "vmm-
 ]}
 
 # System dependent modules provided by ArceOS-Hypervisor.
-axaddrspace = {git = "https://github.com/arceos-hypervisor/axaddrspace.git"}
+axaddrspace = "0.1"
 axhvc = {git = "https://github.com/arceos-hypervisor/axhvc.git"}
-axvcpu = {git = "https://github.com/arceos-hypervisor/axvcpu.git"}
+axvcpu = "0.1"
 axvm = {git = "https://github.com/arceos-hypervisor/axvm.git", branch = "dev-irq"}
 
 # System independent crates provided by ArceOS, these crates could be imported by remote url. 
@@ -53,8 +53,8 @@ page_table_multiarch = "0.5"
 percpu = {version = "0.2", features = ["arm-el2"]}
 
 axdevice = {git = "https://github.com/arceos-hypervisor/axdevice.git"}
-axdevice_base = {git = "https://github.com/arceos-hypervisor/axdevice_crates.git"}
-axvisor_api = {git = "https://github.com/arceos-hypervisor/axvisor_api.git"}
+axdevice_base = "0.1"
+axvisor_api = "0.1"
 
 # platform
 axplat-aarch64-generic = {path = "platform/aarch64-generic", optional = true}

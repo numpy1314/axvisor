@@ -9,7 +9,7 @@ reboot-on-system-off = ["axplat-x86-pc/reboot_on_system_off"]
 rtc = ["axplat-x86-pc/x86_rtc"]
 
 [dependencies]
-axplat-x86-pc = {git = "https://github.com/arceos-org/axplat_crates", features=["irq", "smp"]}
+axplat-x86-pc = {git = "https://github.com/arceos-hypervisor/axplat_crates.git", branch = "vmm",features=["irq", "smp"]}
 
 [build-dependencies]
 serde = {version = "1.0", features = ["derive"]}
