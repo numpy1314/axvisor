@@ -52,7 +52,7 @@ page_table_entry = {version = "0.5", features = ["arm-el2"]}
 page_table_multiarch = "0.5"
 percpu = {version = "0.2", features = ["arm-el2"]}
 
-axdevice = {git = "https://github.com/arceos-hypervisor/axdevice.git"}
+axdevice = {git = "https://github.com/arceos-hypervisor/axdevice.git", branch = "dev"}
 axdevice_base = "0.1"
 axvisor_api = "0.1"
 
@@ -65,7 +65,7 @@ axconfig = {git = "https://github.com/arceos-hypervisor/arceos.git", branch = "v
 prettyplease = "0.2"
 quote = "1.0"
 syn = "2.0"
-toml = {git = "https://github.com/arceos-hypervisor/toml.git", branch = "no_std"}
+toml = "0.9"
 
 [patch.crates-io.axcpu]
 branch = "vmm"
