@@ -133,8 +133,12 @@ jobs:
             echo_env_info
 
             tar -xzf $WORKDIR/source.tar.gz -C $WORKDIR
-            make -C $WORKDIR ARCH=x86_64 defconfig
-            make -C $WORKDIR ARCH=x86_64 DISK_IMG=$WORKDIR/disk-x86_64.img LOG=info BLK=y ACCEL=y VM_CONFIGS=$WORKDIR/configs/vms/nimbos-x86_64.toml APP_FEATURES=fs run | tee $WORKDIR/make_output.log
+            cd $WORKDIR
+            ./bootstrap.sh
+            ./task.py run --plat x86-qemu-q35 --vmconfigs $WORKDIR/configs/vms/nimbos-x86_64.toml --arceos-args DISK_IMG=$WORKDIR/disk-x86_64.img,LOG=info,BLK=y,MEM=8g,ACCEL=y --features fs | tee $WORKDIR/make_output.log
+
+            # make -C $WORKDIR ARCH=x86_64 defconfig
+            # make -C $WORKDIR ARCH=x86_64 DISK_IMG=$WORKDIR/disk-x86_64.img LOG=info BLK=y ACCEL=y VM_CONFIGS=$WORKDIR/configs/vms/nimbos-x86_64.toml APP_FEATURES=fs run | tee $WORKDIR/make_output.log
             
             # Re-echo the environment info
             echo_env_info
