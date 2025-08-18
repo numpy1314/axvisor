@@ -31,7 +31,7 @@ use std::{
 };
 
 use quote::quote;
-use toml::Value;
+use toml::Table;
 
 static CONFIGS_DIR_PATH: &str = "configs/vms";
 
@@ -108,7 +108,7 @@ struct MemoryImage {
 fn parse_config_file(config_file: &ConfigFile) -> Option<MemoryImage> {
     let config = config_file
         .content
-        .parse::<Value>()
+        .parse::<Table>()
         .expect("failed to parse config file");
 
     let id = config.get("base")?.as_table()?.get("id")?.as_integer()? as usize;
