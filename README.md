@@ -46,23 +46,80 @@ Currently, AxVisor has been verified on the following platforms:
 
 Currently, AxVisor has been verified in scenarios with the following systems as guests:
 
-* [ArceOS](https://github.com/arceos-org/arceos)
-* [Starry-OS](https://github.com/Starry-OS)
-* [NimbOS](https://github.com/equation314/nimbos)
-* Linux
-  * currently only Linux with passthrough device on aarch64 is tested.
-  * single core: [config.toml](configs/vms/linux-qemu-aarch64.toml) | [dts](configs/vms/linux-qemu.dts)
-  * smp: [config.toml](configs/vms/linux-qemu-aarch64-smp2.toml) | [dts](configs/vms/linux-qemu-smp2.dts)
+- [ArceOS](https://github.com/arceos-org/arceos)
+- [Starry-OS](https://github.com/Starry-OS)
+- [NimbOS](https://github.com/equation314/nimbos)
+- Linux
+  - currently only Linux with passthrough device on aarch64 is tested.
+  - single core: [config.toml](configs/vms/linux-qemu-aarch64.toml) | [dts](configs/vms/linux-qemu.dts)
+  - smp: [config.toml](configs/vms/linux-qemu-aarch64-smp2.toml) | [dts](configs/vms/linux-qemu-smp2.dts)
 
 # Build and Run
 
 After AxVisor starts, it loads and starts the guest based on the information in the guest configuration file. Currently, AxVisor supports loading guest images from a FAT32 file system and also supports binding guest images to the hypervisor image through static compilation (using include_bytes).
 
+## Quick Start
+
+### 1. Python Environment Setup
+
+AxVisor uses a Python script (`task.py`) for build and run management. To set up the required Python environment:
+
+```bash
+# Option 1: Manual setup
+# Install Python dependencies in a virtual environment
+./bootstrap.sh
+
+# Activate the virtual environment 
+source venv/bin/activate
+
+# Option 2: Automatic setup (recommended)
+# Use the convenience script that automatically runs bootstrap if needed
+source activate.sh
+```
+
+The `bootstrap.sh` script will:
+
+- Create a Python virtual environment in the `venv/` directory
+- Install all required dependencies from `requirements.txt`
+- Test that `task.py` runs correctly
+
+The `activate.sh` script will:
+
+- Automatically run `bootstrap.sh` if the virtual environment doesn't exist
+- Activate the existing virtual environment if it exists
+- Show a message if already in a virtual environment
+
+### 2. Basic Usage
+
+Once the Python environment is set up:
+
+```bash
+# Build the project
+./task.py build
+
+# Run the project
+./task.py run
+
+# Get help
+./task.py --help
+./task.py build --help
+./task.py run --help
+```
+
+### 3. Deactivating Virtual Environment
+
+When you're done working with the project:
+
+```bash
+deactivate
+```
+
 ## Build Environment
 
 AxVisor is written in the Rust programming language, so you need to install the Rust development environment following the instructions on the official Rust website. Additionally, you need to install cargo-binutils to use tools like rust-objcopy and rust-objdump.
+
 ```console
-$ cargo install cargo-binutils
+cargo install cargo-binutils
 ```
 
 If necessary, you may also need to install [musl-gcc](http://musl.cc/x86_64-linux-musl-cross.tgz) to build guest applications.
@@ -83,10 +140,10 @@ In addition, you can use the [axvmconfig](https://github.com/arceos-hypervisor/a
    2. Manually mount `disk.img`, and then place your guest machine image into the file system.
 
       ```console
-      $ mkdir -p tmp
-      $ sudo mount disk.img tmp
-      $ sudo cp /PATH/TO/YOUR/GUEST/VM/IMAGE tmp/
-      $ sudo umount tmp
+      mkdir -p tmp
+      sudo mount disk.img tmp
+      sudo cp /PATH/TO/YOUR/GUEST/VM/IMAGE tmp/
+      sudo umount tmp
       ```
 
 3. Modify the configuration items in the corresponding `./configs/vms/<ARCH_CONFIG>.toml`
@@ -239,7 +296,7 @@ This project exists thanks to all the people who contribute.
 
 AxVisor uses the following open-source license:
 
- * Apache-2.0
- * MulanPubL-2.0
- * MulanPSL2
- * GPL-3.0-or-later
+- Apache-2.0
+- MulanPubL-2.0
+- MulanPSL2
+- GPL-3.0-or-later

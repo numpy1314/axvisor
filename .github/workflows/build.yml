@@ -21,7 +21,7 @@ jobs:
         targets: x86_64-unknown-none, riscv64gc-unknown-none-elf, aarch64-unknown-none, aarch64-unknown-none-softfloat
     - name: Check rust version
       run: rustc --version --verbose
-    - run: ./bootstrap.sh
+    - run: source .activate/.sh
     - name: Clippy the repo
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
       run: ./task.py clippy --arch ${{ matrix.arch }}
@@ -65,7 +65,7 @@ jobs:
         targets: x86_64-unknown-none, riscv64gc-unknown-none-elf, aarch64-unknown-none, aarch64-unknown-none-softfloat
     - uses: Swatinem/rust-cache@v2
     - run: cargo install cargo-binutils
-    - run: ./bootstrap.sh
+    - run: source .activate/.sh
     - name: Build the repo
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
       run: ./task.py build --plat ${{ matrix.plat }}
