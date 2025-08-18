@@ -650,7 +650,7 @@ dependencies = [
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#d0ce87eb171df6f89c5032bde03093696bd38475"
+source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#6903dc6412fff2e08feb99f27a6055d04ed25895"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
