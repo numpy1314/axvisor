@@ -30,10 +30,6 @@ class AxvisorConfig:
         if self.vmconfigs is None:
             self.vmconfigs = []
 
-        # 如果 arch 或 package 未设置，从平台配置文件中读取
-        if self.arch is None or self.package is None:
-            self._load_platform_config()
-
     def _load_platform_config(self):
         """从平台文件夹中的 axconfig.toml 文件读取配置参数"""
         try:
@@ -122,7 +118,7 @@ class AxvisorConfig:
             arch_qemu_args = "-machine virtualization=on"
         elif self.arch == "x86_64":
             # x86_64 架构使用 Intel VT-x 虚拟化支持
-            arch_qemu_args = "-enable-kvm -cpu host"
+            arch_qemu_args = ""
         elif self.arch == "riscv64":
             # RISC-V 架构的虚拟化参数
             arch_qemu_args = "-machine virt -cpu rv64"
@@ -157,6 +153,9 @@ class AxvisorConfig:
     def get_make_variables(self) -> Dict[str, str]:
         """根据配置生成 make 变量"""
         make_vars = {}
+
+        if self.arch == "aarch64":
+            make_vars["LD_SCRIPT"] = "link.x"
 
         # 使用从平台配置文件读取的 package，如果没有则回退到旧的方式
         if self.package:
@@ -273,7 +272,6 @@ def add_common_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--plat",
         type=str,
-        default="aarch64-generic",
         help="Platform (default: aarch64-generic)",
     )
     parser.add_argument(
@@ -351,12 +349,6 @@ def create_config_from_args(args: argparse.Namespace) -> AxvisorConfig:
     if "plat" in config_file:
         config.plat = config_file["plat"]
 
-    if "arch" in config_file:
-        config.arch = config_file["arch"]
-
-    if "package" in config_file:
-        config.package = config_file["package"]
-
     if "features" in config_file:
         config.features = string_or_array_to_list(config_file["features"])
 
@@ -370,27 +362,10 @@ def create_config_from_args(args: argparse.Namespace) -> AxvisorConfig:
         config.vmconfigs = string_or_array_to_list(config_file["vmconfigs"])
 
     # 合并命令行参数（命令行参数优先级较高）
-    plat_changed = False
-    if args.plat and args.plat != "aarch64-generic":
+    if args.plat:
         config.plat = args.plat
-        plat_changed = True
 
-    # 检查是否需要重新加载平台配置
-    need_reload_config = plat_changed or config.arch is None or config.package is None
-
-    # 处理命令行的 arch 和 package 参数
-    arch_from_cmdline = hasattr(args, "arch") and args.arch
-    package_from_cmdline = hasattr(args, "package") and args.package
-
-    if arch_from_cmdline:
-        config.arch = args.arch
-
-    if package_from_cmdline:
-        config.package = args.package
-
-    # 如果需要重新加载配置且没有从命令行指定所有参数，则重新加载
-    if need_reload_config and not (arch_from_cmdline and package_from_cmdline):
-        config._load_platform_config()
+    config._load_platform_config()
 
     if args.features:
         config.features = string_or_array_to_list(args.features)
@@ -423,5 +398,5 @@ def get_make_variables(
 
 def format_make_command_base() -> List[str]:
     cmd_parts = []
-    cmd_parts.extend(["make", "-C", ".arceos", f"A={os.getcwd()}", "LD_SCRIPT=link.x"])
+    cmd_parts.extend(["make", "-C", ".arceos", f"A={os.getcwd()}"])
     return cmd_parts
