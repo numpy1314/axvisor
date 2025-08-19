@@ -46,13 +46,13 @@ AxVisor 的软件架构分为如下图所示的五层，其中，每一个框都
 
 目前，AxVisor 已经在对如下系统作为客户机的情况进行了验证：
 
-- [ArceOS](https://github.com/arceos-org/arceos)
-- [Starry-OS](https://github.com/Starry-OS)
-- [NimbOS](https://github.com/equation314/nimbos)
-- Linux
-  - currently only Linux with passthrough device on aarch64 is tested.
-  - single core: [config.toml](configs/vms/linux-qemu-aarch64.toml) | [dts](configs/vms/linux-qemu.dts)
-  - smp: [config.toml](configs/vms/linux-qemu-aarch64-smp2.toml) | [dts](configs/vms/linux-qemu-smp2.dts)
+* [ArceOS](https://github.com/arceos-org/arceos)
+* [Starry-OS](https://github.com/Starry-OS)
+* [NimbOS](https://github.com/equation314/nimbos)
+* Linux
+  * currently only Linux with passthrough device on aarch64 is tested.
+  * single core: [config.toml](configs/vms/linux-qemu-aarch64.toml) | [dts](configs/vms/linux-qemu.dts)
+  * smp: [config.toml](configs/vms/linux-qemu-aarch64-smp2.toml) | [dts](configs/vms/linux-qemu-smp2.dts)
 
 # 构建及运行
 
@@ -65,15 +65,13 @@ AxVisor 启动之后会根据客户机配置文件中的信息加载并启动客
 AxVisor 使用 Python 脚本 (`task.py`) 进行构建和运行管理。要设置所需的 Python 环境：
 
 ```bash
-# 方式一：手动设置
 # 在虚拟环境中安装 Python 依赖
 ./bootstrap.sh
 
 # 激活虚拟环境
 source venv/bin/activate
 
-# 方式二：自动设置（推荐）
-# 使用便捷脚本，会在需要时自动运行 bootstrap
+# 或使用便捷脚本
 source activate.sh
 ```
 
@@ -82,12 +80,6 @@ source activate.sh
 - 在 `venv/` 目录中创建 Python 虚拟环境
 - 从 `requirements.txt` 安装所有必需的依赖项
 - 测试 `task.py` 是否正常运行
-
-`activate.sh` 脚本将会：
-
-- 如果虚拟环境不存在，自动运行 `bootstrap.sh`
-- 如果虚拟环境存在，激活现有的虚拟环境
-- 如果已经在虚拟环境中，显示提示信息
 
 ### 2. 基本使用
 
@@ -119,7 +111,7 @@ deactivate
 AxVisor 是使用 Rust 编程语言编写的，因此，需要根据 Rust 官方网站的说明安装 Rust 开发环境。此外，还需要安装 [cargo-binutils](https://github.com/rust-embedded/cargo-binutils) 以便使用 `rust-objcopy` 和 `rust-objdump` 等工具
 
 ```console
-cargo install cargo-binutils
+$ cargo install cargo-binutils
 ```
 
 根据需要，可能还要安装 [musl-gcc](http://musl.cc/x86_64-linux-musl-cross.tgz) 来构建客户机应用程序
@@ -140,10 +132,10 @@ cargo install cargo-binutils
    2. 手动挂载 `disk.img`，然后将自己的客户机镜像复制到该文件系统中
 
       ```bash
-      mkdir -p tmp
-      sudo mount disk.img tmp
-      sudo cp /PATH/TO/YOUR/GUEST/VM/IMAGE tmp/
-      sudo umount tmp
+      $ mkdir -p tmp
+      $ sudo mount disk.img tmp
+      $ sudo cp /PATH/TO/YOUR/GUEST/VM/IMAGE tmp/
+      $ sudo umount tmp
       ```
 
 3. 修改对应的 `./configs/vms/<ARCH_CONFIG>.toml` 文件中的配置项
@@ -280,7 +272,7 @@ AxVisor 作为组件化的虚拟机管理程序，很多组件是作为 Crate �
 
 AxVisor 使用如下开源协议
 
-- Apache-2.0
-- MulanPubL-2.0
-- MulanPSL2
-- GPL-3.0-or-later
+ * Apache-2.0
+ * MulanPubL-2.0
+ * MulanPSL2
+ * GPL-3.0-or-later
