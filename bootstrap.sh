@@ -45,11 +45,11 @@ source "$VENV_DIR/bin/activate"
 
 # 升级 pip
 echo "升级 pip..."
-pip install --upgrade pip
+python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --upgrade pip
 
 # 安装依赖
 echo "正在安装 Python 依赖..."
-pip install -r requirements.txt
+pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 
 echo "依赖安装完成!"
 
