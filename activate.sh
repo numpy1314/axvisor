@@ -6,8 +6,7 @@
 
 # 检查虚拟环境是否存在
 if [[ ! -d "venv" ]]; then
-    echo "错误: 虚拟环境不存在，请先运行 ./bootstrap.sh"
-    return 1 2>/dev/null || exit 1
+    ./bootstrap.sh
 fi
 
 # 检查是否已经在虚拟环境中
