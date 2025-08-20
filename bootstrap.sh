@@ -43,13 +43,16 @@ fi
 echo "激活虚拟环境..."
 source "$VENV_DIR/bin/activate"
 
+export HTTP_PROXY=
+export HTTPS_PROXY=
+
 # 升级 pip
 echo "升级 pip..."
 python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --upgrade pip
 
 # 安装依赖
 echo "正在安装 Python 依赖..."
-pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simpl
 
 echo "依赖安装完成!"
 
