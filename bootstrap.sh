@@ -43,8 +43,8 @@ fi
 echo "激活虚拟环境..."
 source "$VENV_DIR/bin/activate"
 
-export HTTP_PROXY=
-export HTTPS_PROXY=
+unset http_proxy
+unset https_proxy
 
 # 升级 pip
 echo "升级 pip..."
