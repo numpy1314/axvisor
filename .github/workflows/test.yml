@@ -50,7 +50,7 @@ jobs:
         ./task.py run --plat ${{ matrix.plat }} --vmconfigs $VM_CONFIGS --features fs --arceos-args DISK_IMG=$DISK_IMG,BUS=mmio,BLK=y,MEM=8g
 
   test_remote:
-    runs-on: dtlqc
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
