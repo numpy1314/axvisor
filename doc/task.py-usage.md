@@ -7,33 +7,15 @@
 ## 基本用法
 
 ```bash
+# 激活虚拟环境
+source ./activate.sh
+
 ./task.py <command> [options]
 ```
 
 ## 可用命令
 
-### 1. setup - 设置依赖
-
-设置 ArceOS 依赖环境。
-
-```bash
-./task.py setup
-```
-
-**功能**：
-
-- 自动克隆 ArceOS 仓库到 `.arceos` 目录
-- 使用 `vmm-dev` 分支
-- 如果目录已存在，会跳过克隆步骤
-
-**示例**：
-
-```bash
-# 首次设置
-./task.py setup
-```
-
-### 2. build - 构建项目
+### 1. build - 构建项目
 
 构建 Axvisor 项目。
 
@@ -50,7 +32,7 @@
 **示例**：
 
 ```bash
-# 使用默认配置构建
+# 使用 .hvconfig.toml 中的配置构建
 ./task.py build
 
 # 指定平台构建
@@ -62,8 +44,8 @@
 # 添加 ArceOS 特性
 ./task.py build --arceos-features "page-alloc-64g,smp"
 
-# 添加 ArceOS 参数
-./task.py build --arceos-args "NET=y,BLK=y,MEM=8g"
+# 添加 ArceOS Makefile 参数
+./task.py build --arceos-args "NET=y,BLK=y,MEM=8g,LOG=debug"
 
 # 指定 VM 配置文件
 ./task.py build --vmconfigs "config1.toml,config2.toml"
@@ -86,11 +68,11 @@
 **示例**：
 
 ```bash
-# 构建并运行
+# 使用 .hvconfig.toml 中的配置运行
 ./task.py run
 
-# 使用特定配置运行
-./task.py run --plat aarch64-generic --arceos-args "NET=y,MEM=4g"
+# 使用特定配置运行，执行后会根据参数生成 .hvconfig.toml
+./task.py run --plat aarch64-generic --arceos-args "MEM=4g,BUS=mmio,BLK=y,LOG=debug" --features "fs"
 ```
 
 ## 命令行参数
@@ -117,42 +99,21 @@
 
 ```bash
 --plat aarch64-generic
---plat x86_64-qemu
---plat riscv64-qemu
-```
-
-#### --arch (架构)
-
-手动指定目标架构，会覆盖从平台配置文件读取的架构。
-
-```bash
---arch aarch64
---arch x86_64
---arch riscv64
+--plat x86-qemu-q35
 ```
 
 **架构特定的 QEMU 参数**：
 
-- `aarch64`: `-machine virtualization=on`
+- `aarch64`: `-machine virtualization=on,gic-version=3`
 - `x86_64`: `-enable-kvm -cpu host`
 - `riscv64`: `-machine virt -cpu rv64`
-
-#### --package (包名)
-
-手动指定平台包名，会覆盖从平台配置文件读取的包名。
-
-```bash
---package axplat-aarch64-generic
---package custom-platform-package
-```
 
 #### --features (Hypervisor 特性)
 
 指定 Hypervisor 的特性，多个特性用逗号分隔。
 
 ```bash
---features "net,blk"
---features "smp,virtualization"
+--features "fs"
 ```
 
 #### --arceos-features (ArceOS 特性)
@@ -170,7 +131,7 @@
 
 ```bash
 --arceos-args "NET=y,BLK=y,MEM=8g"
---arceos-args "SMP=4,DEBUG=y"
+--arceos-args "SMP=4,LOG=debug"
 ```
 
 #### --vmconfigs (VM 配置文件)
@@ -191,37 +152,15 @@
 创建 `.hvconfig.toml` 文件：
 
 ```toml
-# Axvisor 配置文件
-# 平台配置
 plat = "aarch64-generic"
-
-# Hypervisor 特性
-features = ["net", "blk"]
-
-# ArceOS 参数
-arceos_args = [
-    "NET=y",
-    "BUS=mmio", 
-    "BLK=y",
-    "MEM=8g"
-]
-
-# ArceOS 特性
-arceos_features = ["page-alloc-64g", "smp"]
-
-# VM 配置文件路径
-vmconfigs = [
-    "configs/vms/linux-qemu-aarch64.toml",
-    "configs/vms/arceos-aarch64.toml"
-]
+arceos_args = [ "BUS=mmio", "BLK=y", "MEM=8g", "LOG=debug", "QEMU_ARGS=\"-machine gic-version=3\""]
+vmconfigs = [ "tmp/arceos-aarch64.toml",]
 ```
 
 ### 配置优先级
 
 1. **命令行参数** (最高优先级)
 2. **配置文件** (.hvconfig.toml)
-3. **平台配置文件** (platform/{plat}/axconfig.toml) - 仅 arch 和 package
-4. **默认值** (最低优先级)
 
 ## 高级用法
 
@@ -233,28 +172,6 @@ vmconfigs = [
 
 # 对于 aarch64，最终的 QEMU_ARGS 会是：
 # "-smp 4 -m 2G -netdev user,id=net0 -machine virtualization=on"
-```
-
-### 2. 多平台开发
-
-```bash
-# 为不同平台构建
-./task.py build --plat aarch64-generic
-./task.py build --plat x86_64-qemu
-./task.py build --plat riscv64-qemu
-
-# 手动指定架构参数
-./task.py build --plat custom-platform --arch aarch64 --package custom-package
-```
-
-### 3. 调试构建
-
-```bash
-# 启用调试特性
-./task.py build --arceos-features "debug" --arceos-args "LOG=debug,BACKTRACE=y"
-
-# 查看构建命令（不实际执行）
-./task.py build --help
 ```
 
 ### 4. 批量配置
@@ -284,7 +201,7 @@ cp .hvconfig.prod.toml .hvconfig.toml && ./task.py run
    ```bash
    # 清理并重新设置
    rm -rf .arceos
-   ./task.py setup
+   ./task.py clean
    ./task.py build
    ```
 
@@ -348,12 +265,3 @@ cp .hvconfig.prod.toml .hvconfig.toml && ./task.py run
    - 修改 `scripts/config.py` 中的 `add_common_arguments` 函数
    - 更新 `AxvisorConfig` 类的字段
    - 更新相关的处理逻辑
-
-## 相关文件
-
-- `task.py` - 主入口脚本
-- `scripts/config.py` - 配置管理
-- `scripts/build.py` - 构建功能
-- `scripts/run.py` - 运行功能  
-- `scripts/setup.py` - 环境设置
-- `.hvconfig.toml` - 用户配置文件
