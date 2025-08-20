@@ -624,23 +624,9 @@ dependencies = [
 [[package]]
 name = "axplat"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat_crates#1540b43433377aaf432ad4ce2fac70d07a99d754"
+source = "git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm#ea596c55acaf25401fe905307d7cae2cf39030e8"
 dependencies = [
- "axplat-macros 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates)",
- "bitflags 2.9.2",
- "const-str",
- "crate_interface",
- "handler_table",
- "kspin",
- "memory_addr",
-]
-
-[[package]]
-name = "axplat"
-version = "0.1.0"
-source = "git+https://github.com/arceos-org/axplat_crates.git#1540b43433377aaf432ad4ce2fac70d07a99d754"
-dependencies = [
- "axplat-macros 0.1.0 (git+https://github.com/arceos-org/axplat_crates.git)",
+ "axplat-macros 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm)",
  "bitflags 2.9.2",
  "const-str",
  "crate_interface",
@@ -652,7 +638,7 @@ dependencies = [
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn?branch=vmm#9583231332994b2e0c5de2487f03f6cad4faf76f"
+source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn#aa14e3a259b5662191941bedba15eff40b00819f"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
@@ -660,7 +646,7 @@ dependencies = [
  "arm-gic-driver",
  "axconfig-macros",
  "axcpu",
- "axplat 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates)",
+ "axplat 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fdt-parser",
  "heapless",
  "lazyinit",
@@ -749,17 +735,7 @@ dependencies = [
 [[package]]
 name = "axplat-macros"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat_crates#1540b43433377aaf432ad4ce2fac70d07a99d754"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.106",
-]
-
-[[package]]
-name = "axplat-macros"
-version = "0.1.0"
-source = "git+https://github.com/arceos-org/axplat_crates.git#1540b43433377aaf432ad4ce2fac70d07a99d754"
+source = "git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm#ea596c55acaf25401fe905307d7cae2cf39030e8"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -807,11 +783,11 @@ dependencies = [
 [[package]]
 name = "axplat-x86-pc"
 version = "0.1.1"
-source = "git+https://github.com/arceos-org/axplat_crates.git#1540b43433377aaf432ad4ce2fac70d07a99d754"
+source = "git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm#ea596c55acaf25401fe905307d7cae2cf39030e8"
 dependencies = [
  "axconfig-macros",
  "axcpu",
- "axplat 0.1.0 (git+https://github.com/arceos-org/axplat_crates.git)",
+ "axplat 0.1.0 (git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm)",
  "bitflags 2.9.2",
  "heapless",
  "int_ratio",
@@ -831,7 +807,7 @@ dependencies = [
 name = "axplat-x86-qemu-q35"
 version = "0.1.0"
 dependencies = [
- "axplat-x86-pc 0.1.1 (git+https://github.com/arceos-org/axplat_crates.git)",
+ "axplat-x86-pc 0.1.1 (git+https://github.com/arceos-hypervisor/axplat_crates.git?branch=vmm)",
 ]
 
 [[package]]
@@ -1225,7 +1201,7 @@ dependencies = [
  "semver 1.0.26",
  "serde",
  "serde_json",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2475,7 +2451,7 @@ dependencies = [
  "bitflags 2.9.2",
  "log",
  "num-align",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2592,7 +2568,7 @@ dependencies = [
  "quote",
  "spin 0.10.0",
  "syn 2.0.106",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2747,7 +2723,7 @@ dependencies = [
  "as-any",
  "async-trait",
  "rdif-def",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2775,7 +2751,7 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c238eb44d86fabc99028adc973f896ce2202aeb6184cc8b89863f2d157d7ca06"
 dependencies = [
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2786,7 +2762,7 @@ checksum = "d29b44e4bbb180ed0031e22a54d802f77226faf7064e52fcc8cf25c2376cb2ff"
 dependencies = [
  "cfg-if",
  "rdif-base",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2807,7 +2783,7 @@ dependencies = [
  "futures",
  "rdif-base",
  "spin_on",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -2838,7 +2814,7 @@ dependencies = [
  "rdif-systick",
  "rdrive-macros",
  "spin 0.10.0",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -3404,7 +3380,7 @@ version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c73e0ca8c566478040487791c9f488f86c5aec846ca1ab18484be8a1d8c55cd"
 dependencies = [
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -3645,11 +3621,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.15"
+version = "2.0.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80d76d3f064b981389ecb4b6b7f45a0bf9fdac1d5b9204c7bd6714fecc302850"
+checksum = "3467d614147380f2e4e374161426ff399c91084acd2363eaf549172b3d5e60c0"
 dependencies = [
- "thiserror-impl 2.0.15",
+ "thiserror-impl 2.0.16",
 ]
 
 [[package]]
@@ -3665,9 +3641,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.15"
+version = "2.0.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44d29feb33e986b6ea906bd9c3559a856983f92371b3eaa5e83782a351623de0"
+checksum = "6c5e1be1c48b9172ee610da68fd9cd2770e7a4056cb3fc98710ee6906f0c7960"
 dependencies = [
  "proc-macro2",
  "quote",
