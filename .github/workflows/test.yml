@@ -40,12 +40,10 @@ jobs:
     - name: Update rust-toolchain.toml
       run: |
         sed -i "s/^channel = .*/channel = \"${{ matrix.rust-toolchain }}\"/" rust-toolchain.toml
-    - name: bootstrap
-      run: |
-        source ./activate.sh
     - name: Run guests
       continue-on-error: ${{ matrix.rust-toolchain == 'nightly' }}
       run: |
+        source ./activate.sh
         cargo version
         export DISK_IMG="${{ github.workspace }}/disk-aarch64.img"
         export VM_CONFIGS="$(pwd)/configs/vms/nimbos-aarch64.toml"
