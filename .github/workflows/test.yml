@@ -132,10 +132,25 @@ jobs:
             tar -xzf $WORKDIR/source.tar.gz -C $WORKDIR
             cd $WORKDIR
 
+            # 保存当前的代理环境变量
+            echo "保存代理环境变量..."
+            SAVED_HTTP_PROXY="$http_proxy"
+            SAVED_HTTPS_PROXY="$https_proxy"
+
+            # 临时取消设置代理环境变量
             unset http_proxy
             unset https_proxy
-
             source ./activate.sh
+
+            # 恢复代理环境变量
+            echo "恢复代理环境变量..."
+            if [[ -n "$SAVED_HTTP_PROXY" ]]; then
+                export http_proxy="$SAVED_HTTP_PROXY"
+            fi
+            if [[ -n "$SAVED_HTTPS_PROXY" ]]; then
+                export https_proxy="$SAVED_HTTPS_PROXY"
+            fi
+
             ./task.py run --plat x86-qemu-q35 --vmconfigs $WORKDIR/configs/vms/nimbos-x86_64.toml --arceos-args DISK_IMG=$WORKDIR/disk-x86_64.img,LOG=info,BLK=y,MEM=8g,ACCEL=y --features fs | tee $WORKDIR/make_output.log
 
             # make -C $WORKDIR ARCH=x86_64 defconfig

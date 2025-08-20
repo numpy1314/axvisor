@@ -43,7 +43,6 @@ fi
 echo "激活虚拟环境..."
 source "$VENV_DIR/bin/activate"
 
-
 # 升级 pip
 echo "升级 pip..."
 python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --upgrade pip
