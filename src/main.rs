@@ -16,7 +16,6 @@ extern crate axplat_x86_qemu_q35;
 mod hal;
 mod logo;
 mod task;
-mod utils;
 mod vmm;
 
 #[unsafe(no_mangle)]

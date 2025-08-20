@@ -3,8 +3,6 @@ use axerrno::AxResult;
 
 use axvm::config::AxVMCrateConfig;
 
-#[cfg(target_arch = "aarch64")]
-use crate::utils::cache::cache_clean_invalidate_d;
 use crate::vmm::VMRef;
 use crate::vmm::config::config;
 
@@ -58,7 +56,11 @@ fn load_vm_images_from_memory(config: AxVMCrateConfig, vm: VMRef) -> AxResult {
                 mem_region.gpa, mem_region.size
             );
             unsafe {
-                cache_clean_invalidate_d(mem_region.gpa, mem_region.size);
+                crate::hal::arch::cache::dcache_range(
+                    crate::hal::CacheOp::CleanAndInvalidate,
+                    mem_region.gpa.into(),
+                    mem_region.size,
+                );
             }
         }
     }
