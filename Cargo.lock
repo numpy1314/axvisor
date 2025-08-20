@@ -997,7 +997,6 @@ dependencies = [
 [[package]]
 name = "axvm"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axvm.git?branch=dev-irq#312ef08f71d8e21b26c6c4d4c1634266627ff4db"
 dependencies = [
  "arm_vcpu",
  "arm_vgic",
