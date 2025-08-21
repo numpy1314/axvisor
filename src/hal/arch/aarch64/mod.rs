@@ -40,34 +40,7 @@ pub fn inject_interrupt(irq: usize) {
     panic!("no gic driver found")
 }
 
-/// Reads and returns the value of the given aarch64 system register.
-macro_rules! read_sysreg {
-    ($name:ident) => {
-        {
-            let mut value: u64;
-            unsafe{::core::arch::asm!(
-                concat!("mrs {value:x}, ", ::core::stringify!($name)),
-                value = out(reg) value,
-                options(nomem, nostack),
-            );}
-            value
-        }
-    }
-}
 
-/// Writes the given value to the given aarch64 system register.
-macro_rules! write_sysreg {
-    ($name:ident, $value:expr) => {
-        {
-            let v: u64 = $value;
-            unsafe{::core::arch::asm!(
-                concat!("msr ", ::core::stringify!($name), ", {value:x}"),
-                value = in(reg) v,
-                options(nomem, nostack),
-            )}
-        }
-    }
-}
 
 pub fn inject_interrupt_gic_v3(vector: usize) {
     use arm_gic_driver::v3::*;
