@@ -213,6 +213,7 @@ dependencies = [
 [[package]]
 name = "arm_vgic"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/arm_vgic.git#81338d6dd8a9dab04b91c9c0da3d6d84e7768be6"
 dependencies = [
  "aarch64-cpu",
  "aarch64_sysreg",
