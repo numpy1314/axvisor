@@ -638,7 +638,7 @@ dependencies = [
 [[package]]
 name = "axplat-aarch64-dyn"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn#aa14e3a259b5662191941bedba15eff40b00819f"
+source = "git+https://github.com/arceos-hypervisor/axplat-aarch64-dyn#4e7ed7498a1d773b74ce81322c65161ce0759a50"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
@@ -997,6 +997,7 @@ dependencies = [
 [[package]]
 name = "axvm"
 version = "0.1.0"
+source = "git+https://github.com/arceos-hypervisor/axvm.git?branch=dev-irq#312ef08f71d8e21b26c6c4d4c1634266627ff4db"
 dependencies = [
  "arm_vcpu",
  "arm_vgic",
@@ -4419,6 +4420,8 @@ dependencies = [
 [[package]]
 name = "x86_vcpu"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "873e097d52e94c31be3f0175a9f8d6f2edbc77d7e2f8e6995427df9c08b30a2b"
 dependencies = [
  "axaddrspace 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axdevice_base",

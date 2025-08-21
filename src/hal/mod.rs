@@ -138,6 +138,10 @@ pub(crate) fn enable_virtualization() {
 
     for cpu_id in 0..config::plat::CPU_NUM {
         thread::spawn(move || {
+            info!(
+                "Core {} is initializing hardware virtualization support...",
+                cpu_id
+            );
             // Initialize cpu affinity here.
             assert!(
                 ax_set_current_affinity(AxCpuMask::one_shot(cpu_id)).is_ok(),
