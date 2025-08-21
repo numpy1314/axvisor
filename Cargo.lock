@@ -133,7 +133,7 @@ checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
 [[package]]
 name = "arceos_api"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axalloc",
  "axconfig",
@@ -213,7 +213,6 @@ dependencies = [
 [[package]]
 name = "arm_vgic"
 version = "0.1.0"
-source = "git+https://github.com/arceos-hypervisor/arm_vgic.git#81338d6dd8a9dab04b91c9c0da3d6d84e7768be6"
 dependencies = [
  "aarch64-cpu",
  "aarch64_sysreg",
@@ -299,7 +298,7 @@ dependencies = [
 [[package]]
 name = "axalloc"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "allocator",
  "axerrno",
@@ -312,7 +311,7 @@ dependencies = [
 [[package]]
 name = "axconfig"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axconfig-macros",
 ]
@@ -396,7 +395,7 @@ dependencies = [
 [[package]]
 name = "axdriver"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "arm-gic-driver",
  "axalloc",
@@ -459,7 +458,7 @@ dependencies = [
 [[package]]
 name = "axfeat"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axalloc",
  "axdriver",
@@ -475,7 +474,7 @@ dependencies = [
 [[package]]
 name = "axfs"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axdriver",
  "axdriver_block",
@@ -529,7 +528,7 @@ dependencies = [
 [[package]]
 name = "axhal"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "aarch64-cpu",
  "axalloc",
@@ -573,7 +572,6 @@ dependencies = [
 [[package]]
 name = "axlog"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
 dependencies = [
  "cfg-if",
  "crate_interface",
@@ -584,7 +582,7 @@ dependencies = [
 [[package]]
 name = "axmm"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axalloc",
  "axconfig",
@@ -600,7 +598,7 @@ dependencies = [
 [[package]]
 name = "axns"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "crate_interface",
  "lazyinit",
@@ -813,7 +811,7 @@ dependencies = [
 [[package]]
 name = "axruntime"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axalloc",
  "axconfig",
@@ -843,7 +841,7 @@ dependencies = [
 [[package]]
 name = "axstd"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "arceos_api",
  "axerrno",
@@ -856,7 +854,7 @@ dependencies = [
 [[package]]
 name = "axsync"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axtask",
  "kspin",
@@ -866,7 +864,7 @@ dependencies = [
 [[package]]
 name = "axtask"
 version = "0.2.0"
-source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#b6ba2d67ee347e33039f5dd3681fc875f67085aa"
+source = "git+https://github.com/arceos-hypervisor/arceos.git?branch=vmm-dev#7fe72320f5d5c888b8ee9b099342376f97b733b5"
 dependencies = [
  "axconfig",
  "axhal",
@@ -1510,14 +1508,14 @@ checksum = "16ca123a5721e4a28ef60d6e1600cd0a33a9ab376c4b88de04c99bce757e458b"
 
 [[package]]
 name = "filetime"
-version = "0.2.25"
+version = "0.2.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35c0522e981e68cbfa8c3f978441a5f34b30b96e146b33cd3359176b50fe8586"
+checksum = "bc0505cd1b6fa6580283f6bdf70a73fcf4aba1184038c90902b92b3dd0df63ed"
 dependencies = [
  "cfg-if",
  "libc",
  "libredox",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
