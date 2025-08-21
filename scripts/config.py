@@ -118,7 +118,7 @@ class AxvisorConfig:
             arch_qemu_args = "-machine virtualization=on"
         elif self.arch == "x86_64":
             # x86_64 架构使用 Intel VT-x 虚拟化支持
-            arch_qemu_args = ""
+            arch_qemu_args = "-accel kvm"
         elif self.arch == "riscv64":
             # RISC-V 架构的虚拟化参数
             arch_qemu_args = "-machine virt -cpu rv64"

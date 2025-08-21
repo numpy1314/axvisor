@@ -2,7 +2,7 @@
 #
 [base]
 # Guest vm id.
-id = 0
+id = 1
 # Guest vm name.
 name = "nimbos"
 # Virtualization type.

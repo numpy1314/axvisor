@@ -4419,8 +4419,6 @@ dependencies = [
 [[package]]
 name = "x86_vcpu"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "873e097d52e94c31be3f0175a9f8d6f2edbc77d7e2f8e6995427df9c08b30a2b"
 dependencies = [
  "axaddrspace 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axdevice_base",
