@@ -270,6 +270,13 @@ def string_or_array_to_list(value: Any) -> List[str]:
 def add_common_arguments(parser: argparse.ArgumentParser) -> None:
     """为解析器添加通用参数"""
     parser.add_argument(
+        "-c",
+        "--config",
+        type=str,
+        default=".hvconfig.toml",
+        help="Config file path (default: .hvconfig.toml)",
+    )
+    parser.add_argument(
         "--plat",
         type=str,
         help="Platform (default: aarch64-generic)",
@@ -339,8 +346,11 @@ def save_config_to_file(
 
 def create_config_from_args(args: argparse.Namespace) -> AxvisorConfig:
     """从命令行参数和配置文件创建配置对象"""
+    # 从命令行参数获取配置文件路径，如果没有指定则使用默认值
+    config_file_path = getattr(args, "config", ".hvconfig.toml")
+
     # 加载配置文件
-    config_file = load_config_file()
+    config_file = load_config_file(config_file_path)
 
     # 创建配置对象
     config = AxvisorConfig()

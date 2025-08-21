@@ -7,12 +7,16 @@ from typing import Optional
 from .config import AxvisorConfig, create_config_from_args, save_config_to_file
 from .setup import setup_arceos
 
+
 def main(args) -> int:
     """构建项目"""
     print("执行 build 功能...")
 
-    # 检查 .hvconfig.toml 是否存在
-    config_exists = os.path.exists(".hvconfig.toml")
+    # 获取配置文件路径
+    config_file_path = getattr(args, "config", ".hvconfig.toml")
+
+    # 检查配置文件是否存在
+    config_exists = os.path.exists(config_file_path)
 
     # 首先设置 arceos 依赖
     print("设置 arceos 依赖...")
@@ -35,12 +39,12 @@ def main(args) -> int:
         )
         print("构建成功!")
 
-        # 如果 .hvconfig.toml 不存在且有有意义的命令行参数，则创建配置文件
+        # 如果配置文件不存在且有有意义的命令行参数，则创建配置文件
         if not config_exists:
-            print("检测到 .hvconfig.toml 不存在，根据命令行参数创建配置文件...")
-            if save_config_to_file(config):
+            print(f"检测到 {config_file_path} 不存在，根据命令行参数创建配置文件...")
+            if save_config_to_file(config, config_file_path):
                 print(
-                    "配置文件创建成功，下次可以直接运行 './task.py build' 而无需指定参数"
+                    f"配置文件创建成功，下次可以直接运行 './task.py build -c {config_file_path}' 而无需指定参数"
                 )
             else:
                 print("配置文件创建失败，下次仍需手动指定参数")
