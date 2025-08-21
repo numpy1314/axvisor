@@ -1,3 +1,5 @@
+use arm_gic_driver::v3::*;
+
 mod api;
 pub mod cache;
 
@@ -67,15 +69,8 @@ macro_rules! write_sysreg {
     }
 }
 
-#[cfg(target_arch = "aarch64")]
 pub fn inject_interrupt_gic_v3(vector: usize) {
     use arm_gic_driver::v3::*;
-
-    // mask
-    const LR_VIRTIRQ_MASK: usize = (1 << 32) - 1;
-    const LR_STATE_MASK: u64 = 0x3 << 62; // bits [63:62]
-    const LR_STATE_PENDING: u64 = 0x1 << 62; // pending state
-    const LR_STATE_ACTIVE: u64 = 0x2 << 62; // active state
 
     debug!("Injecting virtual interrupt: vector={}", vector);
     let elsr = ICH_ELRSR_EL2.read(ICH_ELRSR_EL2::STATUS);
@@ -92,17 +87,17 @@ pub fn inject_interrupt_gic_v3(vector: usize) {
             }
             continue;
         }
-        let lr_val = read_lr(i);
-        // if a virtual interrupt is enabled and equals to the physical interrupt irq_id
-        if (lr_val as usize & LR_VIRTIRQ_MASK) == vector {
-            let state = lr_val & LR_STATE_MASK;
-            if state == LR_STATE_PENDING || state == LR_STATE_ACTIVE {
-                debug!(
-                    "virtual irq {} already pending/active in LR{}, skipping",
-                    vector, i
-                );
-                return;
-            }
+        let lr_val = ich_lr_el2_get(i);
+
+        if lr_val.read(ICH_LR_EL2::VINTID) == vector as u64 {
+            if lr_val.matches_any(&[ICH_LR_EL2::STATE::Pending, ICH_LR_EL2::STATE::Active]) {}
+            debug!(
+                "Virtual interrupt {} already pending/active in LR{}, skipping",
+                vector, i
+            );
+            // If the interrupt is already pending or active, we can skip injecting it again.
+            // This is important to avoid duplicate injections.
+            return; // already injected
         }
     }
 
@@ -116,12 +111,11 @@ pub fn inject_interrupt_gic_v3(vector: usize) {
 
         // Try to find and reuse an inactive LR
         for i in 0..lr_num {
-            let lr_val = read_lr(i);
-            let state = lr_val & LR_STATE_MASK;
-            if state == 0 {
-                // inactive state
+            let mut lr_val = ich_lr_el2_get(i);
+            if lr_val.matches_any(&[ICH_LR_EL2::STATE::Invalid]) {
                 debug!("Reusing inactive LR{} for IRQ {}", i, vector);
                 free_lr = i as isize;
+
                 break;
             }
         }
@@ -131,7 +125,8 @@ pub fn inject_interrupt_gic_v3(vector: usize) {
         }
     }
 
-    ICH_LR0_EL2.write(
+    ich_lr_el2_write(
+        free_lr as _,
         ICH_LR_EL2::VINTID.val(vector as u64) + ICH_LR_EL2::STATE::Pending + ICH_LR_EL2::GROUP::SET,
     );
 
@@ -147,55 +142,4 @@ pub fn inject_interrupt_gic_v3(vector: usize) {
         "Virtual interrupt {} injected successfully in LR{}",
         vector, free_lr
     );
-}
-
-fn read_lr(id: usize) -> u64 {
-    let id = id as u64;
-    match id {
-        //TODO get lr size from gic reg
-        0 => read_sysreg!(ich_lr0_el2),
-        1 => read_sysreg!(ich_lr1_el2),
-        2 => read_sysreg!(ich_lr2_el2),
-        3 => read_sysreg!(ich_lr3_el2),
-        4 => read_sysreg!(ich_lr4_el2),
-        5 => read_sysreg!(ich_lr5_el2),
-        6 => read_sysreg!(ich_lr6_el2),
-        7 => read_sysreg!(ich_lr7_el2),
-        8 => read_sysreg!(ich_lr8_el2),
-        9 => read_sysreg!(ich_lr9_el2),
-        10 => read_sysreg!(ich_lr10_el2),
-        11 => read_sysreg!(ich_lr11_el2),
-        12 => read_sysreg!(ich_lr12_el2),
-        13 => read_sysreg!(ich_lr13_el2),
-        14 => read_sysreg!(ich_lr14_el2),
-        15 => read_sysreg!(ich_lr15_el2),
-        _ => {
-            panic!("invalid lr id {}", id);
-        }
-    }
-}
-
-fn write_lr(id: usize, val: u64) {
-    let id = id as u64;
-    match id {
-        0 => write_sysreg!(ich_lr0_el2, val),
-        1 => write_sysreg!(ich_lr1_el2, val),
-        2 => write_sysreg!(ich_lr2_el2, val),
-        3 => write_sysreg!(ich_lr3_el2, val),
-        4 => write_sysreg!(ich_lr4_el2, val),
-        5 => write_sysreg!(ich_lr5_el2, val),
-        6 => write_sysreg!(ich_lr6_el2, val),
-        7 => write_sysreg!(ich_lr7_el2, val),
-        8 => write_sysreg!(ich_lr8_el2, val),
-        9 => write_sysreg!(ich_lr9_el2, val),
-        10 => write_sysreg!(ich_lr10_el2, val),
-        11 => write_sysreg!(ich_lr11_el2, val),
-        12 => write_sysreg!(ich_lr12_el2, val),
-        13 => write_sysreg!(ich_lr13_el2, val),
-        14 => write_sysreg!(ich_lr14_el2, val),
-        15 => write_sysreg!(ich_lr15_el2, val),
-        _ => {
-            panic!("invalid lr id {}", id);
-        }
-    }
 }
