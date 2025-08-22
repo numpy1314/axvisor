@@ -64,10 +64,10 @@ jobs:
         components: rust-src
     - uses: Swatinem/rust-cache@v2
     - run: cargo install cargo-binutils
-    - uses: arceos-org/setup-qemu@v0.1
-      with:
-        version: ${{ env.qemu-version }}
-        arch_list: x86_64
+    # - uses: arceos-org/setup-qemu@v0.1
+    #   with:
+    #     version: ${{ env.qemu-version }}
+    #     arch_list: x86_64
     - uses: ./.github/workflows/actions/setup-nimbos-guest-image
       with:
         nimbos-version: 'tags/v0.7'
