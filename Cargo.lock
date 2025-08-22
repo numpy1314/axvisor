@@ -2118,9 +2118,9 @@ dependencies = [
 
 [[package]]
 name = "kasm-aarch64"
-version = "0.1.4"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "293e352fa2d4feed9895b65867bbbf9ead7a6c8a6ebc7e02c5a2f23c0db971d7"
+checksum = "791dc7a2b079d81b8e3615521fccbd75c0c9f068b53f7d891a2e300222c7cada"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -2549,9 +2549,9 @@ dependencies = [
 
 [[package]]
 name = "pie-boot-loader-aarch64"
-version = "0.2.3"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f48afcaff9f2271cf8f8cac3b42a7e2f40f5ace66dccae755bd3a92b6486d17d"
+checksum = "5ef37498b7b1081f2b5edcd13d1a84bd2c214bdabcf4cfaed4d5bd83636fc40f"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
@@ -3405,9 +3405,9 @@ dependencies = [
 
 [[package]]
 name = "somehal"
-version = "0.3.8"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2bc0636a4af2fb4b3054df08b543c7b03185d5bfa89c822193ff94ecaec6ed23"
+checksum = "d7e5ad6e6052150327151689b395ec3ff78950af2a62947c41a5f5f9c9ce2090"
 dependencies = [
  "aarch64-cpu",
  "aarch64-cpu-ext",
@@ -3941,9 +3941,9 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
 
 [[package]]
 name = "url"
-version = "2.5.5"
+version = "2.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec961601b32b6f5d14ae8dabd35ff2ff2e2c6cb4c0e6641845ff105abe96d958"
+checksum = "137a3c834eaf7139b73688502f3f1141a0337c5d8e4d9b536f9b8c796e26a7c4"
 dependencies = [
  "form_urlencoded",
  "idna",
