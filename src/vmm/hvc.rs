@@ -6,7 +6,7 @@ use crate::vmm::ivc::{self, IVCChannel};
 use crate::vmm::{VCpuRef, VMRef};
 
 pub struct HyperCall {
-    vcpu: VCpuRef,
+    _vcpu: VCpuRef,
     vm: VMRef,
     code: HyperCallCode,
     args: [u64; 6],
@@ -20,7 +20,7 @@ impl HyperCall {
         })?;
 
         Ok(Self {
-            vcpu,
+            _vcpu: vcpu,
             vm,
             code,
             args,

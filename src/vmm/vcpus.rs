@@ -266,9 +266,9 @@ pub fn setup_vm_primary_vcpu(vm: VMRef) {
 }
 
 /// Finds the [`AxTaskRef`] associated with the specified vCPU of the specified VM.
-pub fn find_vcpu_task(vm_id: usize, vcpu_id: usize) -> Option<AxTaskRef> {
-    with_vcpu_task(vm_id, vcpu_id, |task| task.clone())
-}
+// pub fn find_vcpu_task(vm_id: usize, vcpu_id: usize) -> Option<AxTaskRef> {
+//     with_vcpu_task(vm_id, vcpu_id, |task| task.clone())
+// }
 
 /// Executes the provided closure with the [`AxTaskRef`] associated with the specified vCPU of the specified VM.
 pub fn with_vcpu_task<T, F: FnOnce(&AxTaskRef) -> T>(

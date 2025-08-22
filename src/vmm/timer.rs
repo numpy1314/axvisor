@@ -1,7 +1,7 @@
 use core::sync::atomic::AtomicUsize;
 use core::sync::atomic::Ordering;
 
-use std::os::arceos::modules::{axconfig, axhal};
+use std::os::arceos::modules::axhal;
 
 use alloc::boxed::Box;
 use kspin::SpinNoIrq;
@@ -9,7 +9,7 @@ use lazyinit::LazyInit;
 use timer_list::{TimeValue, TimerEvent, TimerList};
 
 static TOKEN: AtomicUsize = AtomicUsize::new(0);
-const PERIODIC_INTERVAL_NANOS: u64 = axhal::time::NANOS_PER_SEC / axconfig::TICKS_PER_SEC as u64;
+// const PERIODIC_INTERVAL_NANOS: u64 = axhal::time::NANOS_PER_SEC / axconfig::TICKS_PER_SEC as u64;
 
 /// Represents a timer event in the virtual machine monitor (VMM).
 ///
@@ -97,13 +97,13 @@ pub fn check_events() {
 }
 
 /// Schedule the next timer event based on the periodic interval
-pub fn scheduler_next_event() {
-    trace!("Scheduling next event...");
-    let now_ns = axhal::time::monotonic_time_nanos();
-    let deadline = now_ns + PERIODIC_INTERVAL_NANOS;
-    debug!("PHY deadline {} !!!", deadline);
-    axhal::time::set_oneshot_timer(deadline);
-}
+// pub fn scheduler_next_event() {
+//     trace!("Scheduling next event...");
+//     let now_ns = axhal::time::monotonic_time_nanos();
+//     let deadline = now_ns + PERIODIC_INTERVAL_NANOS;
+//     debug!("PHY deadline {} !!!", deadline);
+//     axhal::time::set_oneshot_timer(deadline);
+// }
 
 /// Initialize the hypervisor timer system
 pub fn init_percpu() {

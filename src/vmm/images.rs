@@ -3,6 +3,7 @@ use axerrno::AxResult;
 
 use axvm::config::AxVMCrateConfig;
 
+use crate::hal::CacheOp;
 use crate::vmm::VMRef;
 use crate::vmm::config::config;
 
@@ -48,22 +49,6 @@ fn load_vm_images_from_memory(config: AxVMCrateConfig, vm: VMRef) -> AxResult {
         load_vm_image_from_memory(buffer, config.kernel.ramdisk_load_addr.unwrap(), vm.clone())
             .expect("Failed to load Ramdisk images");
     };
-    #[cfg(target_arch = "aarch64")]
-    {
-        for mem_region in &config.kernel.memory_regions {
-            debug!(
-                "flush all guest cache GPA: 0x{:x}, Size: 0x{:x}",
-                mem_region.gpa, mem_region.size
-            );
-            unsafe {
-                crate::hal::arch::cache::dcache_range(
-                    crate::hal::CacheOp::CleanAndInvalidate,
-                    mem_region.gpa.into(),
-                    mem_region.size,
-                );
-            }
-        }
-    }
 
     Ok(())
 }
@@ -95,6 +80,12 @@ fn load_vm_image_from_memory(image_buffer: &[u8], load_addr: usize, vm: VMRef) -
             );
         }
 
+        crate::hal::arch::cache::dcache_range(
+            CacheOp::Clean,
+            (region.as_ptr() as usize).into(),
+            region_len,
+        );
+
         // Update the position of the buffer.
         buffer_pos += bytes_to_write;
 
@@ -115,6 +106,8 @@ mod fs {
     use std::fs::File;
 
     use axerrno::{AxResult, ax_err, ax_err_type};
+
+    use crate::hal::CacheOp;
 
     use super::*;
 
@@ -173,7 +166,13 @@ mod fs {
                     Io,
                     format!("Failed in reading from file {}, err {:?}", image_path, err)
                 )
-            })?
+            })?;
+
+            crate::hal::arch::cache::dcache_range(
+                CacheOp::Clean,
+                (buffer.as_ptr() as usize).into(),
+                buffer.len(),
+            );
         }
 
         Ok(())

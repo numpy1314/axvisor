@@ -72,7 +72,7 @@ pub fn start() {
 }
 
 #[allow(unused_imports)]
-pub use vcpus::{find_vcpu_task, with_vcpu_task};
+pub use vcpus::with_vcpu_task;
 
 /// Run a closure with the specified VM.
 pub fn with_wm<T>(vm_id: usize, f: impl FnOnce(VMRef) -> T) -> Option<T> {

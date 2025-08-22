@@ -1,5 +1,3 @@
-use arm_gic_driver::v3::*;
-
 mod api;
 pub mod cache;
 
@@ -39,8 +37,6 @@ pub fn inject_interrupt(irq: usize) {
 
     panic!("no gic driver found")
 }
-
-
 
 pub fn inject_interrupt_gic_v3(vector: usize) {
     use arm_gic_driver::v3::*;
@@ -84,7 +80,7 @@ pub fn inject_interrupt_gic_v3(vector: usize) {
 
         // Try to find and reuse an inactive LR
         for i in 0..lr_num {
-            let mut lr_val = ich_lr_el2_get(i);
+            let lr_val = ich_lr_el2_get(i);
             if lr_val.matches_any(&[ICH_LR_EL2::STATE::Invalid]) {
                 debug!("Reusing inactive LR{} for IRQ {}", i, vector);
                 free_lr = i as isize;

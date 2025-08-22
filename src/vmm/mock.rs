@@ -37,14 +37,14 @@ impl BaseDeviceOps<GuestPhysAddrRange> for MockTimer {
 }
 
 impl MockTimer {
-    pub fn new() -> Self {
-        Self {}
-    }
+    // pub fn new() -> Self {
+    //     Self {}
+    // }
 
-    pub fn tick(&self) {
-        use axvisor_api::vmm::*;
-        inject_interrupt(current_vm_id(), current_vcpu_id(), 0x77);
-    }
+    // pub fn tick(&self) {
+    //     use axvisor_api::vmm::*;
+    //     inject_interrupt(current_vm_id(), current_vcpu_id(), 0x77);
+    // }
 }
 
 unsafe impl Send for MockTimer {}
