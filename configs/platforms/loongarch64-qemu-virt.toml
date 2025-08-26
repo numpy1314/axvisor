@@ -83,3 +83,6 @@ hpet-paddr = 0x1fe08000        # uint
 
 # PSCI method (Power State Coordination Interface)
 psci-method = "hvc"            # str
+
+# GED (Global External Debug)
+ged-paddr = 0x100E001C         # uint

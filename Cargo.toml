@@ -76,10 +76,17 @@ toml = {version = "0.9"}
 branch = "vmm"
 git = "https://github.com/arceos-hypervisor/axcpu"
 
-[patch.crates-io.axaddrspace]
-branch = "3_level_page"
-git = "https://github.com/arceos-hypervisor/axaddrspace"
+# [patch.crates-io.axaddrspace]
+# branch = "3_level_page"
+# git = "https://github.com/arceos-hypervisor/axaddrspace"
 
 [patch."https://github.com/arceos-hypervisor/arm_vcpu.git".arm_vcpu]
 branch = "3_level_page"
 git = "https://github.com/Josen-B/arm_vcpu"
+
+[patch."https://github.com/arceos-hypervisor/axaddrspace.git"]
+axaddrspace = { path = "../axaddrspace" }
+
+[patch.crates-io]
+axaddrspace = { path = "../axaddrspace" }
+axvm = { path = "../axvm" }
