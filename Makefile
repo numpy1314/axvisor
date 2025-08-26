@@ -100,6 +100,8 @@ else ifeq ($(ARCH), aarch64)
   else
     TARGET := aarch64-unknown-none
   endif
+else ifeq ($(ARCH), loongarch64)
+	TARGET := loongarch64-unknown-none-softfloat
 endif
 
 export AX_ARCH=$(ARCH)
