@@ -8,7 +8,7 @@ phys_cpu_sets = [1]
 [kernel]
 entry_point = 0x9000_0000
 image_location = "fs"
-kernel_path = "arceos-loongarch64.bin"
+kernel_path = "arceos-loongarch64.elf"
 kernel_load_addr = 0x9000_0000
 memory_regions = [
     [0x9000_0000, 0x100_0000, 0x7, 0],
