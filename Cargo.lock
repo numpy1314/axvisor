@@ -350,7 +350,7 @@ dependencies = [
  "axaddrspace",
  "axdevice_base 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "axerrno",
- "axvmconfig 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "axvmconfig",
  "cfg-if",
  "log",
  "memory_addr",
@@ -366,7 +366,7 @@ checksum = "67c43baf33ed4790ffd3365c4ca027a1e3d1c2b6058f4605b67bca04cadf48d5"
 dependencies = [
  "axaddrspace",
  "axerrno",
- "axvmconfig 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "axvmconfig",
  "cfg-if",
  "memory_addr",
  "serde",
@@ -379,7 +379,7 @@ source = "git+https://github.com/arceos-hypervisor/axdevice_crates.git#35da6c7b5
 dependencies = [
  "axaddrspace",
  "axerrno",
- "axvmconfig 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "axvmconfig",
  "cfg-if",
  "memory_addr",
  "serde",
@@ -1029,7 +1029,7 @@ dependencies = [
  "axdevice_base 0.1.0 (git+https://github.com/arceos-hypervisor/axdevice_crates.git)",
  "axerrno",
  "axvcpu 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "axvmconfig 0.1.0 (git+https://github.com/arceos-hypervisor/axvmconfig.git)",
+ "axvmconfig",
  "cfg-if",
  "cpumask",
  "log",
@@ -1041,20 +1041,6 @@ dependencies = [
  "riscv_vcpu",
  "spin 0.9.8",
  "x86_vcpu",
-]
-
-[[package]]
-name = "axvmconfig"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3618f2ebd9b25027b70f423c48a8482dc2883ca17f76d2a8d1fdac377e762f02"
-dependencies = [
- "axerrno",
- "enumerable",
- "log",
- "serde",
- "serde_repr",
- "toml 0.9.5",
 ]
 
 [[package]]

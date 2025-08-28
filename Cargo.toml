@@ -94,3 +94,4 @@ axvm = { path = "../axvm" }
 [patch.crates-io]
 axaddrspace = { path = "../axaddrspace" }
 axvm = { path = "../axvm" }
+axvmconfig = { git = "https://github.com/arceos-hypervisor/axvmconfig.git"}
