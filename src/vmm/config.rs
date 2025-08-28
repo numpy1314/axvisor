@@ -22,10 +22,13 @@ pub mod config {
             core::include_str!("../../configs/vms/nimbos-aarch64.toml"),
             #[cfg(target_arch = "riscv64")]
             core::include_str!("../../configs/vms/nimbos-riscv64.toml"),
+            #[cfg(target_arch = "loongarch64")]
+            core::include_str!("../../configs/vms/arceos-loongarch64.toml"),
         ]
     }
 
     include!(concat!(env!("OUT_DIR"), "/vm_configs.rs"));
+
 }
 
 pub fn get_vm_dtb(vm_cfg: &AxVMConfig) -> Option<&'static [u8]> {

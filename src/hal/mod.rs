@@ -17,6 +17,7 @@ use axvm::{AxVMHal, AxVMPerCpu};
 
 #[cfg_attr(target_arch = "aarch64", path = "arch/aarch64/mod.rs")]
 #[cfg_attr(target_arch = "x86_64", path = "arch/x86_64/mod.rs")]
+#[cfg_attr(target_arch = "loongarch64", path = "arch/loongarch64/mod.rs")]
 pub mod arch;
 
 use crate::vmm;
@@ -117,6 +118,7 @@ pub struct AxVCpuHalImpl;
 
 impl AxVCpuHal for AxVCpuHalImpl {
     type MmHal = AxMmHalImpl;
+
 }
 
 #[percpu::def_percpu]
