@@ -10,7 +10,7 @@ package = "axplat-loongarch64-qemu-virt" # str
 [plat]
 # Platform family.
 family = "loongarch64-qemu-virt" # str
-
+cpu-num = 1
 # Base address of the whole physical memory.
 phys-memory-base = 0x4000_0000  # uint
 # Size of the whole physical memory. (2GB)
@@ -28,6 +28,8 @@ phys-bus-offset = 0            # uint
 kernel-aspace-base = "0x0000_0000_0000_0000" # uint
 # Kernel address space size.
 kernel-aspace-size = "0x0000_ffff_ffff_f000" # uint
+# Stack size on bootstrapping. (256K)
+# boot-stack-size = 0x40000 # uint                     # uint
 
 #
 # Device specifications
@@ -87,3 +89,14 @@ psci-method = "hvc"            # str
 
 # GED (Global External Debug)
 ged-paddr = 0x100E001C         # uint
+
+mmio-ranges = [
+    [0x100D_0000, 0x0000_1000],
+    [0x100E_0000, 0x0000_1000],
+    [0x1FE0_0000, 0x0000_1000],
+    [0x2000_0000, 0x1000_0000],
+    [0x4000_0000, 0x0002_0000]
+] # [(uint, uint)]
+
+# Timer interrupt number.
+timer-irq = 11 # uint
