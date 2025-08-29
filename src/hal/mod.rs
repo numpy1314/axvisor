@@ -118,7 +118,6 @@ pub struct AxVCpuHalImpl;
 
 impl AxVCpuHal for AxVCpuHalImpl {
     type MmHal = AxMmHalImpl;
-
 }
 
 #[percpu::def_percpu]

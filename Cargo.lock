@@ -637,6 +637,7 @@ dependencies = [
  "bitflags 2.9.3",
  "const-str",
  "crate_interface",
+ "handler_table",
  "kspin",
  "memory_addr",
 ]
@@ -736,6 +737,7 @@ dependencies = [
  "axconfig-macros",
  "axcpu",
  "axplat 0.2.0",
+ "chrono",
  "kspin",
  "lazyinit",
  "log",

@@ -10,6 +10,8 @@ extern crate axstd as std;
 
 #[cfg(feature = "plat-aarch64-generic")]
 extern crate axplat_aarch64_generic;
+#[cfg(feature = "plat-loongarch64-qemu-virt")]
+extern crate axplat_loongarch64_qemu_virt;
 #[cfg(feature = "plat-x86-qemu-q35")]
 extern crate axplat_x86_qemu_q35;
 

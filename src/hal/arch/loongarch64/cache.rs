@@ -1,8 +1,7 @@
-
 use crate::hal::CacheOp;
 use memory_addr::VirtAddr;
 /// LoongArch64 data cache range operation
-pub fn dcache_range(_op: CacheOp, _addr: VirtAddr, _size: usize){
+pub fn dcache_range(_op: CacheOp, _addr: VirtAddr, _size: usize) {
     // TODO: Implement LoongArch64 dcache range flush
 }
 

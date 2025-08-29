@@ -28,7 +28,6 @@ pub mod config {
     }
 
     include!(concat!(env!("OUT_DIR"), "/vm_configs.rs"));
-
 }
 
 pub fn get_vm_dtb(vm_cfg: &AxVMConfig) -> Option<&'static [u8]> {
