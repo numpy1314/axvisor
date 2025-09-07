@@ -49,18 +49,19 @@ SECTIONS
 
     . = ALIGN(4K);
     _percpu_start = .;
-    .percpu : ALIGN(64) {
+    _percpu_end = _percpu_start + SIZEOF(.percpu);
+    .percpu 0x0 : AT(_percpu_start) {
         _percpu_load_start = .;
         *(.percpu .percpu.*)
         _percpu_load_end = .;
+        . = _percpu_load_start + ALIGN(64) * %SMP%;
     }
-    . = ALIGN(64);
-    _percpu_end = .;
+   . = _percpu_end;
 
     . = ALIGN(4K);
     _edata = .;
 
-    .bss : ALIGN(4K) {
+    .bss : AT(.) ALIGN(4K) {
         boot_stack = .;
         *(.bss.stack)
         . = ALIGN(4K);
